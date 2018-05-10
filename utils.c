@@ -1,0 +1,1 @@
+// Utilidades em geral
