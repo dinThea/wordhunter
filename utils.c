@@ -43,7 +43,7 @@ int inverterVetor(int size, char vetor[size], char *newVec) {
     Dado uma matriz de strings de tamanho mn, retorna um vetor com os valores 
     em serie nas verticais, horizontais, diagonais e invertidas
 */
-int linearizarMatriz(void* _matriz, int size[2], void* _linearVector){
+Vector* linearizarMatriz(void* _matriz, int size[2], int _size) {
 
     int i, j, k, l, cnt, count = 0, siz;
     // Casting de tipo
@@ -90,26 +90,32 @@ int linearizarMatriz(void* _matriz, int size[2], void* _linearVector){
     linearVetor[count] = '\0';
     siz = (int)(sizeof(linearVetor)/sizeof(linearVetor[0]));
     char newVec[siz];
-    inverterVetor(siz, linearVetor, newVec);  
-    strcat(linearVetor, newVec);
+    inverterVetor(siz, linearVetor, newVec);    
+    strcat(linearVetor, newVec); 
+    Vector* finalVec = create_vec(siz);    
+    for (i = 0; i < siz; i++) { finalVec->vec[i]=linearVetor[i]; }
     
-}
+    return finalVec;
+}  
 // Verifica se a primeira string esta contida na segunda, retorna 0 se nao
 int simpleRegex( char *str1, char *str2 ) {
 
     int i, j;
     char tempCh = ' ';
-    if (len(str1) > len(str2)) {
+    if (sizeof(str1) > sizeof(str2)) {
         return 0;
-    } else {
+    } else
         for (i = 0; i < (strlen(str2) - strlen(str1)); i++)
             if (str1[0] == str2[i]) {
                 j = 1;
+                tempCh = str1[j];
                 do {
-                    tempCh = str1[j];
+                    if ( j == (strlen(str1)-2) && tempCh == str2[ i + j ]) return 1;
                     j++;
+                    tempCh = str1[j];                    
                 } while (tempCh == str2[ i + j ]);
             }
-    }
-    
+
+    return 0;
+        
 }
