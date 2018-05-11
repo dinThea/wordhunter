@@ -1,6 +1,6 @@
 // Gera o caca palavras dado um tamanho, e opcinalmente um conjunto de palavras
-#include "utils.c"
-
+#include "stdio.h"
+#include "string.h"
 // Gera o caca palavras dado um numero de linhas m e de colunas n
 int gerarCp(int m, int n){}
 // Abre o caca palavras dado o nome do arquivo
