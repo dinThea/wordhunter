@@ -3,7 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#define separator 'E'
+#define separator 'e'
 // Retorna o maior inteiro
 int maior(int a, int b) { return a>=b?a:b; }
 
@@ -43,7 +43,7 @@ int inverterVetor(int size, char vetor[size], char *newVec) {
     Dado uma matriz de strings de tamanho mn, retorna um vetor com os valores 
     em serie nas verticais, horizontais, diagonais e invertidas
 */
-Vector* linearizarMatriz(void* _matriz, int size[2], int _size) {
+Vector* linearizarMatriz(void* _matriz, int size[2]) {
 
     int i, j, k, l, cnt, count = 0, siz;
     // Casting de tipo
@@ -86,7 +86,7 @@ Vector* linearizarMatriz(void* _matriz, int size[2], int _size) {
         aux[count - cnt] = separator;
         count++;    
     }
-    for (i = 0; i < (count - cnt); i++) { linearVetor[count] = (aux[i] > 'z' || aux[i] < 'a') ? separator:aux[i]; count++; }
+    for (i = 0; i < (count - cnt); i++) { linearVetor[count] = (aux[i] > 'Z' || aux[i] < 'A') ? separator:aux[i]; count++; }
     linearVetor[count] = '\0';
     siz = (int)(sizeof(linearVetor)/sizeof(linearVetor[0]));
     char newVec[siz];

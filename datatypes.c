@@ -28,16 +28,30 @@ typedef struct siz_t {
 
 // Struct para guardar um caca palavras individual
 typedef struct cacaPalavra_t {
+    int each_size;
     int linhas;
-    Vector finder;
-    Vector vec[];
+    Vector caca;
 } Caca;
 
-// Struct para guardar um grupo de caca palavras
-typedef struct cacaPalavras_t {
-    int numcacas;
-    Caca cacas[];
-} Cacas;
+Caca* create_caca(char* _matriz, int size, int each_size){
+    
+    int i;
+    Vector* vec = create_vec(size); 
+    
+    Caca* caca = malloc(sizeof(Caca) + sizeof(vec)*size);
+    if (caca != NULL) {
+        caca->linhas = size;
+        for (i = 0; i < size; i++){
+            (*vec).vec[i] = _matriz[i];
+        }
+        for (i = 0; i < size; i++){
+            (*caca).caca.vec[i] = (*vec).vec[i];
+        }
+    }
 
-Caca* create_caca(void ) 
+    (*caca).each_size = each_size;
+    
+    return caca;
+}
+
 
