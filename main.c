@@ -10,7 +10,7 @@
 
 int main (int argc, char *argv[]) {
 
-    abrirMenu( strlen(argv[1])+1, argv[1] );
+    while (!abrirMenu( strlen(argv[1])+1, argv[1] ));
     /*char matrizTeste[][2] = {{'a','b'}, {'d','e'}, {'g','h'}};
     int size[2] = {3, 2};
     Vector* flatten = linearizarMatriz(matrizTeste, size, 1000);

@@ -4,7 +4,21 @@
 // Gera o caca palavras dado um numero de linhas m e de colunas n
 int gerarCp(int m, int n){}
 // Abre o caca palavras dado o nome do arquivo
-int abrirCp(char *nomeArquivo){}
+vecsize* abrirCp(char *nomeArquivo){
+    
+    vecsize* vec;
+    char ch;
+    FILE* fp = fopen(strcat(nomeArquivo, ".txt"), "r");
+    ch = fgetc(fp);
+    while (ch != EOF) {
+        while (ch != '\n'){
+            ch = fgetc(fp);
+            if 
+        }
+    }
+    return vec;
+
+}
 // Gera o caca palavras dado um numero m de linhas, um numero n de colunas e um vetor de palavras
 int gerarCpPalavras(int m, int n, char **palavras){}
 // Abre o terminal para entrar com a matriz com um numero m de linhas e n de colunas
