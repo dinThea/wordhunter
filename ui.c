@@ -28,6 +28,18 @@ char getch_(int echo) {
     return ch;
 }
 
+long int calcDig(long int num) {
+    
+    if (num == 0) return 0;
+    long int dig = 0, cpynum = num;
+    while (cpynum%10==0) {
+        dig++;
+        cpynum/=10;
+    }
+
+    return dig;
+}
+
 // Comportamento similar ao fgets, porem sem quebra de linha
 char *fgets_(char *string, int n) {
 	char* result;
@@ -54,6 +66,7 @@ int abrirMenuCli(int flag){
     char sel, aux[100];
     static Vector* flatten = NULL;
     static Caca* caca = NULL;
+    static int pontuacao = 0, numpalavras = 0;
     if ((caca != NULL) && (flatten == NULL)) {
         int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};
         char matriz[(*caca).each_size][((*caca).linhas/(*caca).each_size)];
@@ -124,7 +137,7 @@ int abrirMenuCli(int flag){
                         printf ("|                                          |");
                         printf ("\n\t\t\t\t\t|  ");
                         for (i = 0; i < strlen((*caca).caca.vec)+1; i++) {
-                            if ((*caca).caca.vec[i] == 'e') { printf ("|\n\t\t\t\t\t|  "); }
+                            if ((*caca).caca.vec[i] == separator) { printf ("|\n\t\t\t\t\t|  "); }
                             else {
                                 printf ("%c ", (*caca).caca.vec[i]);
                             }
@@ -138,6 +151,9 @@ int abrirMenuCli(int flag){
                 case '3' :
                     abrirMenuCli(1);
                 break;
+                default :
+                    abrirMenuCli(1);
+                break;
             }
         break;
         case '2' :
@@ -146,8 +162,8 @@ int abrirMenuCli(int flag){
             printT ("|      1. Gerar caca palavras aleatorio    |\n");                                                                                                         
             printT ("|      2. Gerar palavras no ultimo cc      |\n");                                                                                                         
             printT ("|      3. Gerar a partir do teclado        |\n");
-            printT ("|      3. Gerar a partir do teclado        |\n");
-            printT ("|      4. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            printT ("|      4. Gerar a partir do teclado        |\n");
+            printT ("|      5. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             printT ("+------------------------------------------+\n");
             flatten = NULL;            
             tabbing();
@@ -156,12 +172,16 @@ int abrirMenuCli(int flag){
                 case '1' :
                 break;
                 case '2' :
+                    printf ("+----------GERADOR-DE-PALAVRAS-------------+\n");
+                    printT ("|  Entre com o numero de palavras: ");
+                    numPalavras
+                    printf (" |\n");                                                                                                         
 
                 break;
                 case '3' :
 
                 break;
-                case '4' :
+                case '5' :
                     abrirMenuCli(1);
                 break;
             }
@@ -174,9 +194,24 @@ int abrirMenuCli(int flag){
             for (i = 0; i < 33-strlen(aux); i++) printf(" ");
             printf ("|\n");
             //fputs((*flatten).vec, stdout);
-            if (simpleRegex(aux, (*flatten).vec)) printT ("+------------------ACHOU-------------------+\n");
-            else ("+------------------NADA--------------------+\n");
-
+            if (simpleRegex(aux, (*flatten).vec)) {
+                printT ("+------------------ACHOU-------------------+\n");
+                pontuacao++;
+            }
+            else printT ("+------------------NADA--------------------+\n");
+            tabbing();
+            abrirMenuCli(1);
+            
+        break;
+        case '4' :
+            printf ("+-------------SUA-PONTUACAO-E--------------+\n");
+            printT ("|      P. ");
+            printf ("%d", pontuacao);
+            for (i = 0; i < 32-calcDig(pontuacao); i++) printf (" ");
+            printf ("|\n");
+            printT ("+------------------------------------------+\n");
+            tabbing();
+            abrirMenuCli(1);            
         break;
         case '5' :
             printf ("+------------------DEBUG-------------------+\n");
@@ -187,10 +222,21 @@ int abrirMenuCli(int flag){
             sel = getch_(0);
             switch ( sel ) {
                 case '1' :
-                    for (i = 0; i < (*flatten).length; i++)
-                        printf ("%c", (*flatten).vec[i] != separator?(*flatten).vec[i]:'\n');
+                    printf ("| ");
+                    for (i = 0; i < (*flatten).length; i++) {
+
+                        if ((*flatten).vec[i] != separator) printf ("%c",(*flatten).vec[i]);
+                        else { printf ("\n"); printT ("| "); }
+                        
+                    }
+                    printf ("\n");
+                    tabbing();
+                    abrirMenuCli(1);
                 break;
                 case '2' :
+                    abrirMenuCli(1);
+                break;
+                default :
                     abrirMenuCli(1);
                 break;
             }
@@ -232,5 +278,3 @@ int abrirMenu(int argc, char argv[argc]){
     return 1;
 
 }
-// Mostra caca palavras dado a matriz matriz
-int mostraCp(char **matriz){}

@@ -45,15 +45,16 @@ int printMatriz(void* _matriz, int size[2]){
 int inverterVetor(int size, char vetor[size], char *newVec) {
 
     int i = 0;
-    char ch = vetor[i];
+    newVec[size+1] = '\n';
     for (; i < (size+1); i++) { 
-        newVec[size+i-1] = (vetor[i] > 'Z' || vetor[i] < 'A')? separator:vetor[i]; 
-        // printf ("%c", newVec[size+i-1]);
+        newVec[size+i] = (vetor[size-i] > 'Z' || vetor[size-i] < 'A')? separator:vetor[size-i]; 
+    }
+    for (i=0; i < 2*(size+1); i++) {
+        if ((newVec[i]<'A' || newVec[i]>'Z') && newVec[i]!='\n') newVec[i]='\n';
     }
     newVec[i] = '\0';
-    fputs (newVec, stdout);
     
-    return 0;
+    return i;
 }
 /*  
     Dado uma matriz de strings de tamanho mn, retorna um vetor com os valores 
@@ -134,10 +135,8 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
         
     }*/
     linearVetor[count] = '\n';
-    linearVetor[count++] = '\0';
-    inverterVetor(count, linearVetor, linearVetor);    
-    printf ("oi\n");
-    fputs (linearVetor, stdout);
+    linearVetor[count++] = '\n';
+    siz = inverterVetor(count, linearVetor, linearVetor);    
     /*for (i = 0; i < 2*count - 1; i++) {
         printf ("%c ", linearVetor[i] != separator?linearVetor[i]:'\n');
         if (linearVetor[i] == separator) tabbing();
