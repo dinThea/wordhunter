@@ -2,14 +2,7 @@
 #include "stdio.h"
 #include "string.h"
 // Gera o caca palavras dado um numero de linhas m e de colunas n
-Caca* gerarCp(int m, int n){
-    // 1. Funcao de gerar caracter aleatorio
-    // 2. Definir uma matriz mxn
-    // 3. Preencher com valores aleatorios
-    // 4. So isso
-    char matriz[m][n];
-    return create_caca(matriz, 5, 2);
-}
+Caca* gerarCp(int m, int n){}
 // Abre o caca palavras dado o nome do arquivo
 Caca* abrirCp(char *nomeArquivo){
     
@@ -39,29 +32,13 @@ Caca* abrirCp(char *nomeArquivo){
     size[1] = i;
     char new[size[0]*size[1]+1];
     strcpy(new, _line);
-    Caca* caca = create_caca(new, size[0]*size[1], size[1]);
+    Caca* caca = create_caca(new, size[0]*size[1]+1, size[1]);
     return caca;
 
 }
 // Gera o caca palavras dado um numero m de linhas, um numero n de colunas e um vetor de palavras
 int gerarCpPalavras(int m, int n, char **palavras){}
 // Abre o terminal para entrar com a matriz com um numero m de linhas e n de colunas
-Caca* lerCp(int m, int n){
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    int a;
-    
-    char matriz[m][n];
-    // Mesma coisa do primeiro, so que ao inves de gerar aleatoriamente vc da entrada com o getch_
-    return create_caca(matriz, 5, 2);
-} 
+Caca* lerCp(int m, int n){}
 // Dado uma matriz matriz, gera um numero num de palavras dentro da matriz
 char** genPalavras(char **matriz){}

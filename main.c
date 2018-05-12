@@ -6,6 +6,7 @@
 #include <string.h>
 #include "gen.c"
 #include "ver.c"
+#include <curses.h>
 #include "ui.c"
 
 // Isso e o main, ele e primeira funcao que o gcc vai chamar quando o programa foi chamado no bash

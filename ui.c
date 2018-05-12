@@ -1,6 +1,6 @@
 //  Interface com usuario
 #include <termios.h>
-#define tab "\t\t\t\t\t"
+enum winsizes { ncols = 20, nlines = 20, xs = 10, ys = 10 };
 static struct termios old, new;
 
 // Inicializa as novas definicoes de io do terminal
@@ -48,21 +48,13 @@ char *fgets_(char *string, int n) {
 
 }
 
-// Seta pra frente
-void printT(char text[]){
-    printf ("\t\t\t\t\t%s", text);    
-}
-// Tabear
-void tabbing(){
-    printf (tab);
-}
 // Abre o menu de cli puro 
-int abrirMenuCli(int flag, Caca* c, Vector* vec){
+int abrirMenuCli(int flag){
     int i, j, k=0;
     char sel, aux[100];
-    Vector* flatten = vec;
-    Caca* caca = c;
-    if ((c != NULL) && (flatten == NULL)) {
+    static Vector* flatten = NULL;
+    static Caca* caca = NULL;
+    if ((caca != NULL) && (flatten == NULL)) {
         int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};
         char matriz[(*caca).each_size][((*caca).linhas/(*caca).each_size)];
         for (i = 0; i < (*caca).each_size; i++) {
@@ -95,8 +87,9 @@ int abrirMenuCli(int flag, Caca* c, Vector* vec){
     printT ("|      1. Abrir/Vizualizar caca palavras   | \n");                                                                                                         
     printT ("|      2. Gerar caca palavras              | \n");  
     printT ("|      3. Fazer um palpite                 | \n");
-    printT ("|      4. Verificar pontuacao              | \n");                                                                                                       
-    printT ("|      5. Sair                             | \n");                                                                                                         
+    printT ("|      4. Verificar pontuacao              | \n"); 
+    printT ("|      5. DEBUG                            | \n");                                                                                                           
+    printT ("|      6. Sair                             | \n");                                                                                                         
     printT ("+------------------------------------------+ \n");
     tabbing();
     sel = getch_(0);
@@ -121,12 +114,12 @@ int abrirMenuCli(int flag, Caca* c, Vector* vec){
                     printT ("+------------------------------------------+\n");
                     tabbing();
                     flatten = NULL;
-                    abrirMenuCli(1, caca, flatten);
+                    abrirMenuCli(1);
                 break;
                 case '2' :
                     if (caca == NULL) {
                         printf ("+---NENHUM-CACA-PALAVRAS-INICIALIZADO------+\n");
-                        abrirMenuCli(1, caca, flatten);
+                        abrirMenuCli(1);
                     } else {
                         printf ("|                                          |");
                         printf ("\n\t\t\t\t\t|  ");
@@ -138,12 +131,12 @@ int abrirMenuCli(int flag, Caca* c, Vector* vec){
                         }
                         printf ("                                       |\n");
                         tabbing();
-                        abrirMenuCli(1, caca, flatten);
+                        abrirMenuCli(1);
 
                     }
                 break;
                 case '3' :
-                    abrirMenuCli(1, caca, flatten);
+                    abrirMenuCli(1);
                 break;
             }
         break;
@@ -169,7 +162,7 @@ int abrirMenuCli(int flag, Caca* c, Vector* vec){
 
                 break;
                 case '4' :
-                    abrirMenuCli(1, caca, flatten);
+                    abrirMenuCli(1);
                 break;
             }
         break;
@@ -184,7 +177,26 @@ int abrirMenuCli(int flag, Caca* c, Vector* vec){
             if (simpleRegex(aux, (*flatten).vec)) printT ("+------------------ACHOU-------------------+\n");
             else ("+------------------NADA--------------------+\n");
 
+        break;
         case '5' :
+            printf ("+------------------DEBUG-------------------+\n");
+            printT ("|      1. Mostrar codice de regex          |\n");            
+            printT ("|      2. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            printT ("+------------------------------------------+\n");
+            tabbing();
+            sel = getch_(0);
+            switch ( sel ) {
+                case '1' :
+                    for (i = 0; i < (*flatten).length; i++)
+                        printf ("%c", (*flatten).vec[i] != separator?(*flatten).vec[i]:'\n');
+                break;
+                case '2' :
+                    abrirMenuCli(1);
+                break;
+            }
+                                                                             
+        break;             
+        case '6' :
             printf ("+------------------SAINDO------------------+\n");
             return 0;
         break;
@@ -194,13 +206,24 @@ int abrirMenuCli(int flag, Caca* c, Vector* vec){
 }
 // Abr\n");e o menu de ncurses
 int abrirMenuNcurses(){
-    printf ("\nNCURSES DOES NOT EXIST\n");
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    attron(A_STANDOUT | A_UNDERLINE);
+    printw("hello world");
+    attron(A_STANDOUT | A_UNDERLINE);    
+    refresh();
+    addstr("I am highlighted!\n");
+    start_color();
+    refresh();    
+    endwin();
 }
 // Abre o primeiro menu
 int abrirMenu(int argc, char argv[argc]){
     
     if ( argc > 0 ) {
-        if (!strcmp( argv, "cli" )) return abrirMenuCli(0, NULL, NULL);
+        if (!strcmp( argv, "cli" )) return abrirMenuCli(0);
         else if (!strcmp( argv, "ncurses" )) abrirMenuNcurses();
     }
     else if ( argc == 0 ) {
