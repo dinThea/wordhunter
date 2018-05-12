@@ -57,13 +57,12 @@ void tabbing(){
     printf (tab);
 }
 // Abre o menu de cli puro 
-int abrirMenuCli(int flag, Caca* c){
-    
+int abrirMenuCli(int flag, Caca* c, Vector* vec){
     int i, j, k=0;
     char sel, aux[100];
-    Vector* flatten = NULL;
+    Vector* flatten = vec;
     Caca* caca = c;
-    if ((c != NULL) && (flatten != NULL)) {
+    if ((c != NULL) && (flatten == NULL)) {
         int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};
         char matriz[(*caca).each_size][((*caca).linhas/(*caca).each_size)];
         for (i = 0; i < (*caca).each_size; i++) {
@@ -74,7 +73,9 @@ int abrirMenuCli(int flag, Caca* c){
             k=0;
         }
         flatten = linearizarMatriz(matriz, size);
-        fputs ((*flatten).vec, stdout);
+        //for (i = 0; i < (*flatten).length; i++)
+        //    printf ("%c", (*flatten).vec[i] != separator?(*flatten).vec[i]:'\n');
+        //fputs ((*flatten).vec, stdout);
 
     }
     if (flag == 0) {
@@ -120,12 +121,12 @@ int abrirMenuCli(int flag, Caca* c){
                     printT ("+------------------------------------------+\n");
                     tabbing();
                     flatten = NULL;
-                    abrirMenuCli(1, caca);
+                    abrirMenuCli(1, caca, flatten);
                 break;
                 case '2' :
                     if (caca == NULL) {
                         printf ("+---NENHUM-CACA-PALAVRAS-INICIALIZADO------+\n");
-                        abrirMenuCli(1, caca);
+                        abrirMenuCli(1, caca, flatten);
                     } else {
                         printf ("|                                          |");
                         printf ("\n\t\t\t\t\t|  ");
@@ -137,12 +138,12 @@ int abrirMenuCli(int flag, Caca* c){
                         }
                         printf ("                                       |\n");
                         tabbing();
-                        abrirMenuCli(1, caca);
+                        abrirMenuCli(1, caca, flatten);
 
                     }
                 break;
                 case '3' :
-                    abrirMenuCli(1, caca);
+                    abrirMenuCli(1, caca, flatten);
                 break;
             }
         break;
@@ -168,7 +169,7 @@ int abrirMenuCli(int flag, Caca* c){
 
                 break;
                 case '4' :
-                    abrirMenuCli(1, caca);
+                    abrirMenuCli(1, caca, flatten);
                 break;
             }
         break;
@@ -179,7 +180,7 @@ int abrirMenuCli(int flag, Caca* c){
             fgets_(aux, 100);
             for (i = 0; i < 33-strlen(aux); i++) printf(" ");
             printf ("|\n");
-            fputs((*flatten).vec, stdout);
+            //fputs((*flatten).vec, stdout);
             if (simpleRegex(aux, (*flatten).vec)) printT ("+------------------ACHOU-------------------+\n");
             else ("+------------------NADA--------------------+\n");
 
@@ -199,7 +200,7 @@ int abrirMenuNcurses(){
 int abrirMenu(int argc, char argv[argc]){
     
     if ( argc > 0 ) {
-        if (!strcmp( argv, "cli" )) return abrirMenuCli(0, NULL);
+        if (!strcmp( argv, "cli" )) return abrirMenuCli(0, NULL, NULL);
         else if (!strcmp( argv, "ncurses" )) abrirMenuNcurses();
     }
     else if ( argc == 0 ) {

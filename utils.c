@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #define separator 'e'
+
+// MARSHAALLLLLL aqui voce vai fazer a sua funcao de gerar um char aleatorio entre A e Z 
 // Retorna o maior inteiro
 int maior(int a, int b) { return a>=b?a:b; }
 
@@ -34,7 +36,7 @@ int inverterVetor(int size, char vetor[size], char *newVec) {
 
     int i = 0;
     char ch = vetor[i];
-    for (; i < size; i++) { newVec[size-i-1] = (vetor[i] > 'z' || vetor[i] < 'a')? separator:vetor[i]; }
+    for (; i < size; i++) { newVec[size-i-1] = (vetor[i] > 'Z' || vetor[i] < 'A')? separator:vetor[i]; }
     newVec[i] = '\0';
 
     return 0;
@@ -63,29 +65,34 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
             sz1 = &size[1];     sz2 = &size[0];
         }
         // Varrendo de fato
-        for (*it1 = 0; *it1 < (*sz1); (*it1)++){
+        for (*it1 = 0; *it1 < (*sz1)-2; (*it1)++){
             for (*it2 = 0; *it2 < (*sz2)+1; (*it2)++){
-                if ((*it2) == *sz2) linearVetor[count] = separator;
-                else linearVetor[count] = matriz[j][k];
+                linearVetor[count] = matriz[j][k];
+                // printf ("%c", matriz[j][k]);
                 count++;
             }
+            linearVetor[count] = separator;
+            // printf ("\n");
         }   
     }
     char aux[size[1]*size[0]];  cnt = count;
     // Varrendo as diagonais
-    for (i = 0; i < 2 + menor(size[1] + 1, size[0] + 1) + (int)abs( size[0] - size[1] ); i++){
+    for (i = 0; i < 2*menor(size[1] + 1, size[0] + 1) + (int)abs( size[0] - size[1] ); i++){
         // Define uma rotina diferente caso o valor seja abaixo da diagonal principal
         if (i < size[0]) { j = size[0] - i; k = 0; }
-        else { k = abs(menor(size[0], size[1]) - i); j = 0; }
-        while ( j < size[0] && k < maior(size[0], size[1])) {
+        else { k = abs(size[0] - i); j = 0; }
+        while ( j < size[0] && k < size[1]-1) {
             linearVetor[count] = matriz[j][k];
             aux[count - cnt] = matriz[size[0] - j - 1][size[1] - k - 1];
+            // printf("%c ", matriz[j][k], j);
             j++;    k++;    count++;
         }
+        // printf ("\n");
         linearVetor[count] = separator;
         aux[count - cnt] = separator;
         count++;    
     }
+    // printf("end?\n");
     for (i = 0; i < (count - cnt); i++) { linearVetor[count] = (aux[i] > 'Z' || aux[i] < 'A') ? separator:aux[i]; count++; }
     linearVetor[count] = '\0';
     siz = (int)(sizeof(linearVetor)/sizeof(linearVetor[0]));

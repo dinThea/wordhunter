@@ -1,0 +1,7 @@
+Instruções
+
+    1. Funcao de gerar caracter aleatorio no utils.c
+    2. Funcao de gerar uma matriz aleatoria
+        2.1. Definir uma matriz mxn
+        2.1. Preencher com valores aleatorios
+    3. Funcao de entrar com uma matriz pelo teclado
