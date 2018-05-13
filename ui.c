@@ -312,7 +312,7 @@ int abrirMenuCli(){
                     fgets_(aux, 100, 0, 0);
                     // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
                     #else                    
-                    fgetc_(aux,100,0,0);
+                    fgets_(aux,100,0,0);
                     #endif
                     /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
                         na entrada do teclado
