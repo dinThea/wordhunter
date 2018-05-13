@@ -43,6 +43,8 @@ char *fgets_(char *string, int n, int mode, int echo) {
                 tmpch = mode == 1?toupper(getche()):getche();            
                 if (!isspace(tmpch)) {
                     *string++ = tmpch;
+                } else {
+                    printf ("space\n");
                 }
             }
         } else {
