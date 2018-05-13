@@ -123,7 +123,11 @@ int abrirMenuCli(int flag){
                 case '1' :
                     printf ("+---INSIRA-O-NOME-DO-ARQUIVO-SEM-(.txt)----+\n");
                     printT ("|      N. ");
+                    #if __linux__
                     fgets_(aux, 100);
+                    #else                    
+                    aux = cgets(aux);
+                    #endif
                     for (i = 0; i < 33-strlen(aux); i++) printf(" ");
                     printf ("|\n");
                     caca = abrirCp(aux);
