@@ -19,7 +19,6 @@ char *fgets_(char *string, int n) {
     int i = n;
     result = string;
     tmpch = getch_(0);
-    printf ("%c", tmpch);
     if (tmpch != '\n') { *string++ = tmpch; printf("%c", tmpch); }
     while ((i-- > 0) && tmpch != 13){
         result[i] = tmpch;
@@ -27,6 +26,8 @@ char *fgets_(char *string, int n) {
         if (tmpch != 13) {
             *string++ = tmpch;
             printf("%c",tmpch);
+        } else {
+            printf("fala malandro");
         }
     }
     *string++ = '\0';
