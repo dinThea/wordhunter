@@ -18,19 +18,32 @@ char *fgets_(char *string, int n) {
     char tmpch;
     int i = n;
     result = string;
-    tmpch = getch_(0);
-    if (tmpch != '\n') { *string++ = tmpch; printf("%c", tmpch); }
-    while ((i-- > 0) && tmpch != 13){
-        result[i] = tmpch;
-        tmpch = getch_(0); 
-        if (tmpch != 13) {
-            *string++ = tmpch;
-            printf("%c",tmpch);
-        } else {
-            printf("fala malandro");
+    #if __linux__
+        tmpch = getch_(0);
+        if (tmpch != '\n') { *string++ = tmpch; printf("%c", tmpch); }
+        while ((i-- > 0) && tmpch != '\n'){
+            result[i] = tmpch;
+            tmpch = getch_(0); 
+            if (tmpch != '\n') {
+                *string++ = tmpch;
+                printf("%c",tmpch);
+            }
         }
-    }
-    *string++ = '\0';
+        *string++ = '\0';
+    #else   
+    
+        tmpch = getch();
+        if (tmpch != 13) { *string++ = tmpch; }
+        while ((i-- > 0) && tmpch != '13'){
+            result[i] = tmpch;
+            tmpch = getch(); 
+            if (tmpch != '\n') {
+                *string++ = tmpch;
+            }
+        }
+        *string++ = '\0';
+
+    #endif
 
 }
 
