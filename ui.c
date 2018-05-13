@@ -18,15 +18,12 @@ long int calcDig(long int num) {
         - echo: define se os caracteres serao impressos ou nao
 */
 char *fgets_(char *string, int n, int mode, int echo) {
-	char* result;
     char tmpch;
     int i = n;
-    result = string;
     #if __linux__
         tmpch = mode == 1?toupper(getch_(echo)):getch_(echo);
         if (!isspace(tmpch)) { *string++ = tmpch; }
         while ((i-- > 0) && !isspace(tmpch)){
-            result[i] = tmpch;
             tmpch = mode == 1?toupper(getch_(echo)):getch_(echo);
             if (!isspace(tmpch)) {
                 *string++ = tmpch;
@@ -39,7 +36,6 @@ char *fgets_(char *string, int n, int mode, int echo) {
             tmpch = mode == 1?toupper(getche()):getche();
             if (!isspace(tmpch)) { *string++ = tmpch; }
             while ((i-- > 0) && !isspace(tmpch)){
-                result[i] = tmpch;
                 tmpch = mode == 1?toupper(getche()):getche();            
                 if (!isspace(tmpch)) {
                     *string++ = tmpch;
@@ -51,7 +47,6 @@ char *fgets_(char *string, int n, int mode, int echo) {
             tmpch = mode == 1?toupper(getch()):getch();
             if (!isspace(tmpch)) { *string++ = tmpch; }
             while ((i-- > 0) && !isspace(tmpch)){
-                result[i] = tmpch;
                 tmpch = mode == 1?toupper(getche()):getch();            
                 if (!isspace(tmpch)) {
                     *string++ = tmpch;
