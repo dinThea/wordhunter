@@ -31,13 +31,13 @@ char *fgets_(char *string, int n) {
         }
         *string++ = '\0';
     #else   
-    
+
         tmpch = getch();
         if (tmpch != 13) { *string++ = tmpch; }
-        while ((i-- > 0) && tmpch != '13'){
+        while ((i-- > 0) && tmpch != 13){
             result[i] = tmpch;
             tmpch = getch(); 
-            if (tmpch != '\n') {
+            if (tmpch != 13) {
                 *string++ = tmpch;
             }
         }
