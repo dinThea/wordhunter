@@ -32,11 +32,11 @@ char *fgets_(char *string, int n) {
         *string++ = '\0';
     #else   
 
-        tmpch = getch();
+        tmpch = getche();
         if (tmpch != 13) { *string++ = tmpch; }
         while ((i-- > 0) && tmpch != 13){
             result[i] = tmpch;
-            tmpch = getch(); 
+            tmpch = getche(); 
             if (tmpch != 13) {
                 *string++ = tmpch;
             }
