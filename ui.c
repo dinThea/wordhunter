@@ -39,9 +39,7 @@ char *fgets_(char *string, int n, int mode, int echo) {
                 tmpch = mode == 1?toupper(getche()):getche();            
                 if (!isspace(tmpch)) {
                     *string++ = tmpch;
-                } else {
-                    printf ("space\n");
-                }
+                } 
             }
         } else {
             tmpch = mode == 1?toupper(getch()):getch();
@@ -50,8 +48,6 @@ char *fgets_(char *string, int n, int mode, int echo) {
                 tmpch = mode == 1?toupper(getche()):getch();            
                 if (!isspace(tmpch)) {
                     *string++ = tmpch;
-                } else {
-                    printf ("space\n");                    
                 }
             }
         } 
@@ -100,6 +96,7 @@ int abrirMenuCli(){
         dice de traducao, se nao, cria um
     */
     if ((caca != NULL) && (flatten == NULL)) {
+        printf ("hey");
         int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};   // Tamanho do caca papavras
         char matriz[size[0]][size[1]];                                           // Inicializa uma matriz com o tamanho size
         // Varrendo a matriz
