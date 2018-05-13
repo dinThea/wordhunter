@@ -274,7 +274,7 @@ int abrirMenuNcurses(){
         }   
         endwin();
     #else
-        printf ("\nO ncurses nao esta disponivel para esse sistema operacional")
+        printf ("\nO ncurses nao esta disponivel para esse sistema operacional");
     #endif
 }
 // Abre o primeiro menu
