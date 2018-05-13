@@ -137,8 +137,9 @@ int abrirMenuCli(){
     printT ("|      1. Abrir/Vizualizar caca palavras   | \n");                                                                                                         
     printT ("|      2. Gerar caca palavras              | \n");  
     printT ("|      3. Fazer um palpite                 | \n");
-    printT ("|      4. Verificar pontuacao              | \n"); 
-    printT ("|      5. DEBUG                            | \n");                                                                                                           
+    printT ("|      4. Verificar pontuacao              | \n");
+    printT ("|      5. Validar caca palavras            | \n"); 
+    printT ("|      6. DEBUG                            | \n");                                                                                                           
     printT ("|      7. Sair                             | \n");                                                                                                         
     printT ("+------------------------------------------+ \n");
     tabbing();
@@ -163,7 +164,7 @@ int abrirMenuCli(){
                     fgets_(aux, 100, 0, 0);
                     // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
                     #else                    
-                    aux = cgets(aux);
+                    fgests_(aux, 100, 0, 0);
                     #endif
                     /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
                         na entrada do teclado
@@ -207,11 +208,9 @@ int abrirMenuCli(){
         case '2' :
             printf ("+------------------GERADOR-----------------+\n");
             printT ("|  Selecione a tarefa que deseja executar: |\n");                                                                                                         
-            printT ("|      1. Gerar caca palavras aleatorio    |\n");                                                                                                         
-            printT ("|      2. Gerar palavras no ultimo cc      |\n");                                                                                                         
-            printT ("|      3. Gerar a partir do teclado        |\n");
-            printT ("|      4. Gerar a partir do teclado        |\n");
-            printT ("|      5. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            printT ("|      1. Gerar caca palavras aleatorio    |\n");
+            printT ("|      2. Gerar a partir do teclado        |\n");
+            printT ("|      3. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
             printT ("+------------------------------------------+\n");
             flatten = NULL;            
             tabbing();
@@ -235,9 +234,6 @@ int abrirMenuCli(){
 
                 break;
                 case '3' :
-
-                break;
-                case '5' :
                     abrirMenuCli();
                 break;
             }
@@ -269,7 +265,7 @@ int abrirMenuCli(){
             tabbing();
             abrirMenuCli();            
         break;
-        case '5' :
+        case '6' :
             printf ("+------------------DEBUG-------------------+\n");
             printT ("|      1. Mostrar codice de regex          |\n");            
             printT ("|      2. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
@@ -298,9 +294,45 @@ int abrirMenuCli(){
             }
                                                                              
         break;             
-        case '6' :
-            printf ("+------------------SAINDO------------------+\n");
+        case '5' :
+
+            printf ("+----------------VERIFICADOR---------------+\n");
+            printT ("|      1. Verificar a partir de arquivo    |\n");
+            printT ("|      2. Inserir conjunto de palavras     |\n");                                    
+            printT ("|      3. Sair                             |\n");                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+            printT ("+------------------------------------------+\n");
+            tabbing();
+            sel = getch_(0);
+            switch (sel) {
+                case '1' :
+                    printf ("+---INSIRA-O-NOME-DO-ARQUIVO-SEM-(.txt)----+\n");
+                    printT ("|      N. ");
+                    // Caso o sistema seja linux, abre a funcao integrada com a biblioteca terminus
+                    #if __linux__
+                    fgets_(aux, 100, 0, 0);
+                    // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
+                    #else                    
+                    aux = cgets(aux);
+                    #endif
+                    /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
+                        na entrada do teclado
+                    */
+                    printf ("%-33s", aux);
+                    printf ("|\n");
+                    if (verArquivo((*flatten).vec, aux, strlen(aux)+1)) printf("TUDO CORRETO");                     
+                    printT ("+------------------------------------------+\n");
+                    tabbing();
+                    abrirMenuCli();
+
+                break;
+                case '2' :
+
+                break;
+            }
             return 0;
+        break;
+        case '7' :
+            printf ("+------------------SAINDO------------------+\n");
         break;
     }
                                                                                                              
