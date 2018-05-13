@@ -19,14 +19,14 @@ char *fgets_(char *string, int n) {
     int i = n;
     result = string;
     tmpch = getch_(0);
-    printf ("%d ", tmpch);
-    if (tmpch != '\n') { *string++ = tmpch; printf("%d ", tmpch); }
-    while ((i-- > 0) && tmpch != '\n'){
+    printf ("%c", tmpch);
+    if (tmpch != '\n') { *string++ = tmpch; printf("%c", tmpch); }
+    while ((i-- > 0) && tmpch != 13){
         result[i] = tmpch;
         tmpch = getch_(0); 
-        if (tmpch != '\n') {
+        if (tmpch != 13) {
             *string++ = tmpch;
-            printf("%d ",tmpch);
+            printf("%c",tmpch);
         }
     }
     *string++ = '\0';
