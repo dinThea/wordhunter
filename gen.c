@@ -31,6 +31,7 @@ Caca* abrirCp(char *nomeArquivo){
     }
     size[1] = i;
     char new[size[0]*size[1]+1];
+    fclose(fp);
     strcpy(new, _line);
     Caca* caca = create_caca(new, size[0]*size[1]+1, size[1]);
     return caca;

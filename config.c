@@ -35,7 +35,8 @@
 
     char getch_(int echo) {
         char ch;
-        ch = getch();
+        if (echo)   ch = getche();
+        else        ch = getch();
         return ch;
     }
 #endif 

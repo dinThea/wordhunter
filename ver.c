@@ -7,7 +7,7 @@ int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numP
     int i;
     char (*palavras)[maiorPalavra] = _palavras;
     for (i = 0; i < numPalavras; i++) {
-        if (!simpleRegex(palavras[i], identificacao)) return 0;
+        if (strstr(identificacao, palavras[i]) == NULL) return 0;
     }
     return 1;
 

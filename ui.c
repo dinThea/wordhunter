@@ -12,35 +12,50 @@ long int calcDig(long int num) {
     return dig;
 }
 
-// Comportamento similar ao fgets, porem sem quebra de linha
-char *fgets_(char *string, int n) {
+/* Comportamento similar ao fgets so que sem quebra de linha
+    os parametros sao:
+        - mode: define se vai ou nao ser impresso em uppercase
+        - echo: define se os caracteres serao impressos ou nao
+*/
+char *fgets_(char *string, int n, int mode, int echo) {
 	char* result;
     char tmpch;
     int i = n;
     result = string;
     #if __linux__
-        tmpch = getch_(0);
-        if (tmpch != '\n') { *string++ = tmpch; printf("%c", tmpch); }
-        while ((i-- > 0) && tmpch != '\n'){
+        tmpch = mode == 1?toupper(getch_(echo)):getch_(echo);
+        if (!isspace(tmpch)) { *string++ = tmpch; }
+        while ((i-- > 0) && !isspace(tmpch)){
             result[i] = tmpch;
-            tmpch = getch_(0); 
-            if (tmpch != '\n') {
+            tmpch = mode == 1?toupper(getch_(echo)):getch_(echo);
+            if (!isspace(tmpch)) {
                 *string++ = tmpch;
-                printf("%c",tmpch);
             }
         }
         *string++ = '\0';
     #else   
 
-        tmpch = getche();
-        if (tmpch != 13) { *string++ = tmpch; }
-        while ((i-- > 0) && tmpch != 13){
-            result[i] = tmpch;
-            tmpch = getche(); 
-            if (tmpch != 13) {
-                *string++ = tmpch;
+        if (echo) {
+            tmpch = mode == 1?toupper(getche()):getche();
+            if (!isspace(tmpch)) { *string++ = tmpch; }
+            while ((i-- > 0) && !isspace(tmpch)){
+                result[i] = tmpch;
+                tmpch = mode == 1?toupper(getche()):getche();            
+                if (!isspace(tmpch)) {
+                    *string++ = tmpch;
+                }
             }
-        }
+        } else {
+            tmpch = mode == 1?toupper(getch()):getch();
+            if (!isspace(tmpch)) { *string++ = tmpch; }
+            while ((i-- > 0) && !isspace(tmpch)){
+                result[i] = tmpch;
+                tmpch = mode == 1?toupper(getche()):getch();            
+                if (!isspace(tmpch)) {
+                    *string++ = tmpch;
+                }
+            }
+        } 
         *string++ = '\0';
 
     #endif
@@ -64,29 +79,47 @@ int getd(){
     return result;
 }
 
-// Abre o menu de cli puro 
-int abrirMenuCli(int flag){
-    int i, j, k=0;
-    char sel, aux[100];
-    static Vector* flatten = NULL, *palavras = NULL;
+// Abre o menu de cli puro
+int abrirMenuCli(){
+    
+    int i, j;               // Contadores
+    char sel, aux[100];     // Variaveis auxiliares de selecao e entrada
+    /* Variaveis estaticas para armazenar os Vectors 
+        de palavras e do codice de traducao
+    */
+    static Vector* flatten = NULL, *palavras = NULL;                                
+    /* Armazena estaticamente e dinamicamente o caca
+        palavras
+    */                                                   
     static Caca* caca = NULL;
-    static int pontuacao = 0, numpalavras = 0;
+    /* Contadores estaticos de pontuacao e de numero
+        de palavras e de chamada
+    */ 
+    static int pontuacao = 0, numpalavras = 0, flag = 0;
+    /* Verifica se caca ja foi preenchido por alguma
+        funcao de gerar caca palavras e se existe co-
+        dice de traducao, se nao, cria um
+    */
     if ((caca != NULL) && (flatten == NULL)) {
-        int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};
-        char matriz[(*caca).each_size][((*caca).linhas/(*caca).each_size)];
-        for (i = 0; i < (*caca).each_size; i++) {
-            for (j = 0; j < (*caca).linhas/(*caca).each_size - 1; j++) {
-                int index = i*(*caca).linhas/(*caca).each_size + k + j;
+        int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};   // Tamanho do caca papavras
+        char matriz[size[0]][size[1]];                                           // Inicializa uma matriz com o tamanho size
+        // Varrendo a matriz
+        for (i = 0; i < size[0]; i++) {
+            for (j = 0; j < (*caca).linhas/size[0] - 1; j++) {
+                // Como a matriz esta salva de forma linear em caca, e necessario deslinearizar
+                int index = i*(*caca).linhas/size[0] + j;
                 matriz[i][j] = (*caca).caca.vec[index];
             }
-            k=0;
         }
+
+        /* Chama a funcao de linearizar a matriz
+            de forma a chamar um codice de busca
+        */ 
         flatten = linearizarMatriz(matriz, size);
-        //for (i = 0; i < (*flatten).length; i++)
-        //    printf ("%c", (*flatten).vec[i] != separator?(*flatten).vec[i]:'\n');
-        //fputs ((*flatten).vec, stdout);
 
     }
+
+    // Testando se e a primeira vez que a funcao e chamada
     if (flag == 0) {
         printf ("                                                                               \n");                                                                                                                      
         printf ("I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
@@ -97,7 +130,8 @@ int abrirMenuCli(int flag){
         printf ("   `8a a8'   `8a a8'     88        88  88        88  88    `8b 88       88     \n");
         printf ("    `8a8'     `8a8'      88        88  Y8a.    .a8P  88     `8888       88     \n");
         printf ("     `8'       `8'       88        88   `'Y8888Y''   88      `888       88     \n");
-        printT ("+------------------------------------------+\n");    
+        printT ("+------------------------------------------+\n");
+        flag++;    
     } else                                      printf ("+------------------------------------------+\n");
     printT ("|  Selecione a tarefa que deseja executar: | \n");                                                                                                         
     printT ("|      1. Abrir/Vizualizar caca palavras   | \n");                                                                                                         
@@ -108,6 +142,7 @@ int abrirMenuCli(int flag){
     printT ("|      7. Sair                             | \n");                                                                                                         
     printT ("+------------------------------------------+ \n");
     tabbing();
+    // Lendo a entrada e gerando a arvore de selecao
     sel = getch_(0);
     switch ( sel ) {
         case '1' :
@@ -123,23 +158,28 @@ int abrirMenuCli(int flag){
                 case '1' :
                     printf ("+---INSIRA-O-NOME-DO-ARQUIVO-SEM-(.txt)----+\n");
                     printT ("|      N. ");
+                    // Caso o sistema seja linux, abre a funcao integrada com a biblioteca terminus
                     #if __linux__
-                    fgets_(aux, 100);
+                    fgets_(aux, 100, 0, 0);
+                    // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
                     #else                    
                     aux = cgets(aux);
                     #endif
-                    for (i = 0; i < 33-strlen(aux); i++) printf(" ");
+                    /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
+                        na entrada do teclado
+                    */
+                    printf ("%-33s", aux);
                     printf ("|\n");
                     caca = abrirCp(aux);
                     printT ("+------------------------------------------+\n");
                     tabbing();
                     flatten = NULL;
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
                 case '2' :
                     if (caca == NULL) {
                         printf ("+---NENHUM-CACA-PALAVRAS-INICIALIZADO------+\n");
-                        abrirMenuCli(1);
+                        abrirMenuCli();
                     } else {
                         printf ("|                                          |");
                         printf ("\n");
@@ -152,15 +192,15 @@ int abrirMenuCli(int flag){
                         }
                         printf ("                                       |\n");
                         tabbing();
-                        abrirMenuCli(1);
+                        abrirMenuCli();
 
                     }
                 break;
                 case '3' :
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
                 default :
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
             }
         break;
@@ -198,7 +238,7 @@ int abrirMenuCli(int flag){
 
                 break;
                 case '5' :
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
             }
         break;
@@ -206,17 +246,17 @@ int abrirMenuCli(int flag){
             printf ("+------------------PALPITE-----------------+\n");
             printT ("|            Insira um palpite:            |\n");                                                                                                         
             printT ("|      P. ");
-            fgets_(aux, 100);
-            for (i = 0; i < 33-strlen(aux); i++) printf(" ");
+            fgets_(aux, 100, 1, 0);
+            printf ("%-33s", aux);
             printf ("|\n");
             //fputs((*flatten).vec, stdout);
-            if (simpleRegex(aux, (*flatten).vec)) {
+            if (strstr((*flatten).vec, aux) != NULL) {
                 printT ("+------------------ACHOU-------------------+\n");
                 pontuacao++;
             }
             else printT ("+------------------NADA--------------------+\n");
             tabbing();
-            abrirMenuCli(1);
+            abrirMenuCli();
             
         break;
         case '4' :
@@ -227,7 +267,7 @@ int abrirMenuCli(int flag){
             printf ("|\n");
             printT ("+------------------------------------------+\n");
             tabbing();
-            abrirMenuCli(1);            
+            abrirMenuCli();            
         break;
         case '5' :
             printf ("+------------------DEBUG-------------------+\n");
@@ -247,13 +287,13 @@ int abrirMenuCli(int flag){
                     }
                     printf ("\n");
                     tabbing();
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
                 case '2' :
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
                 default :
-                    abrirMenuCli(1);
+                    abrirMenuCli();
                 break;
             }
                                                                              
@@ -263,7 +303,6 @@ int abrirMenuCli(int flag){
             return 0;
         break;
     }
-    //printf ("------------------------------------------+\n");
                                                                                                              
 }
 // Abr\n");e o menu de ncurses
@@ -296,17 +335,13 @@ int abrirMenuNcurses(){
         printf ("\nO ncurses nao esta disponivel para esse sistema operacional");
     #endif
 }
-// Abre o primeiro menu
+// Abre o primeiro menu, passando os argumentos de linha
 int abrirMenu(int argc, char argv[argc]){
     
-    if ( argc > 0 ) {
-        if (!strcmp( argv, "cli" )) return abrirMenuCli(0);
-        else if (!strcmp( argv, "ncurses" )) abrirMenuNcurses();
-    }
-    else if ( argc == 0 ) {
-        printf ("ue");
-        abrirMenuCli(0);
-    }
+
+    if (!strcmp( argv, "cli" )) return abrirMenuCli();              // Caso o argumento seja cli, abre o menu de cli
+    else if (!strcmp( argv, "ncurses" )) abrirMenuNcurses();        // Caso o argumento seja curses, abre o menu de curses
+    
     return 1;
 
 }
