@@ -4,11 +4,12 @@
 #include <stdlib.h>
 #include <string.h>
 #define separator '\n'
-#define tab "\t\t\t\t\t"
+#define tab "\t\t"
 
 // Seta pra frente
 void printT(char text[]){
-    printf ("\t\t\t\t\t%s", text);    
+    printf (tab);
+    printf ("%s", text);    
 }
 // Tabear
 void tabbing(){

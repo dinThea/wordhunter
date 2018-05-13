@@ -1,32 +1,4 @@
 //  Interface com usuario
-#include <termios.h>
-enum winsizes { ncols = 20, nlines = 20, xs = 10, ys = 10 };
-static struct termios old, new;
-
-// Inicializa as novas definicoes de io do terminal
-void initTermios(int echo) {
-    tcgetattr(0, &old); // Pega as velhas configuracoes do terminal
-    new = old; // Cria novas configucaoes
-    new.c_lflag &= ~ICANON; // Desabilita o buffer de io
-    if (echo) {
-        new.c_lflag |= ECHO; 
-    } else {
-        new.c_lflag &= ~ECHO;
-    }
-    tcsetattr(0, TCSANOW, &new);
-}
-
-void resetTermios(void) {
-    tcsetattr(0, TCSANOW, &old);
-}
-
-char getch_(int echo) {
-    char ch;
-    initTermios(echo);
-    ch = getchar();
-    resetTermios();
-    return ch;
-}
 
 long int calcDig(long int num) {
     
@@ -60,11 +32,28 @@ char *fgets_(char *string, int n) {
 
 }
 
+// Entrada de inteiros sem pular linhas
+int getd(){
+
+    int result = 0;
+    char tmpch;
+    tmpch = getch_(0);
+    if (tmpch != '\n') { result = result*10+(tmpch-'0'); printf("%c", tmpch); }
+    while (tmpch != '\n'){
+        tmpch = getch_(0); 
+        if (tmpch != '\n') {
+            result = result*10+(tmpch-'0');
+            printf("%c",tmpch);
+        }
+    }
+    return result;
+}
+
 // Abre o menu de cli puro 
 int abrirMenuCli(int flag){
     int i, j, k=0;
     char sel, aux[100];
-    static Vector* flatten = NULL;
+    static Vector* flatten = NULL, *palavras = NULL;
     static Caca* caca = NULL;
     static int pontuacao = 0, numpalavras = 0;
     if ((caca != NULL) && (flatten == NULL)) {
@@ -84,25 +73,24 @@ int abrirMenuCli(int flag){
 
     }
     if (flag == 0) {
-        printf ("                                                                                                                      \n");                                                                                                                      
-        printf ("                                                   88 88        88                                                    \n");
-        printf ("                                                   88 88        88                          ,d                        \n");
-        printf ("                                                   88 88        88                          88                        \n");
-        printf ("8b      db      d8  ,adPPYba,  8b,dPPYba,  ,adPPYb,88 88aaaaaaaa88 88       88 8b,dPPYba, MM88MMM ,adPPYba, 8b,dPPYba,\n");
-        printf ("`8b    d88b    d8' a8'     '8a 88P'   'Y8 a8'    `Y88 88''''''''88 88       88 88P'   `'8a  88   a8P_____88 88P'   'Y8\n");
-        printf (" `8b  d8'`8b  d8'  8b       d8 88         8b       88 88        88 88       88 88       88  88   8PP''''''' 88        \n");
-        printf ("  `8bd8'  `8bd8'   '8a,   ,a8' 88         '8a,   ,d88 88        88 '8a,   ,a88 88       88  88,  '8b,   ,aa 88        \n");
-        printf ("    YP      YP      `'YbbdP''  88          `'8bbdP'Y8 88        88  `'YbbdP'Y8 88       88  'Y888 `'Ybbd8'' 88        \n");
-        printf ("                                                                                                                      \n");
-        printf ("                                        +------------------------------------------+                                   \n");    
-    } else                                      printf ("+------------------------------------------+                                   \n");
+        printf ("                                                                               \n");                                                                                                                      
+        printf ("I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
+        printf ("`8b       d8b       d8'  88        88  88        88  8888b     88       88     \n");
+        printf ("  8,     ,8'8,     ,8'   88        88  88        88  88 `8b    88       88     \n");
+        printf ("  Y8     8P Y8     8P    88aaaaaaaa88  88        88  88  `8b   88       88     \n");
+        printf ("  `8b   d8' `8b   d8'    88''''''''88  88        88  88   `8b  88       88     \n");
+        printf ("   `8a a8'   `8a a8'     88        88  88        88  88    `8b 88       88     \n");
+        printf ("    `8a8'     `8a8'      88        88  Y8a.    .a8P  88     `8888       88     \n");
+        printf ("     `8'       `8'       88        88   `'Y8888Y''   88      `888       88     \n");
+        printT ("+------------------------------------------+\n");    
+    } else                                      printf ("+------------------------------------------+\n");
     printT ("|  Selecione a tarefa que deseja executar: | \n");                                                                                                         
     printT ("|      1. Abrir/Vizualizar caca palavras   | \n");                                                                                                         
     printT ("|      2. Gerar caca palavras              | \n");  
     printT ("|      3. Fazer um palpite                 | \n");
     printT ("|      4. Verificar pontuacao              | \n"); 
     printT ("|      5. DEBUG                            | \n");                                                                                                           
-    printT ("|      6. Sair                             | \n");                                                                                                         
+    printT ("|      7. Sair                             | \n");                                                                                                         
     printT ("+------------------------------------------+ \n");
     tabbing();
     sel = getch_(0);
@@ -119,7 +107,7 @@ int abrirMenuCli(int flag){
             switch ( sel ) {
                 case '1' :
                     printf ("+---INSIRA-O-NOME-DO-ARQUIVO-SEM-(.txt)----+\n");
-                    printf ("\t\t\t\t\t|      N. ");
+                    printT ("|      N. ");
                     fgets_(aux, 100);
                     for (i = 0; i < 33-strlen(aux); i++) printf(" ");
                     printf ("|\n");
@@ -135,9 +123,10 @@ int abrirMenuCli(int flag){
                         abrirMenuCli(1);
                     } else {
                         printf ("|                                          |");
-                        printf ("\n\t\t\t\t\t|  ");
+                        printf ("\n");
+                        printT ("|  ");
                         for (i = 0; i < strlen((*caca).caca.vec)+1; i++) {
-                            if ((*caca).caca.vec[i] == separator) { printf ("|\n\t\t\t\t\t|  "); }
+                            if ((*caca).caca.vec[i] == separator) { printf ("|\n"); tabbing(); printf("|  "); }
                             else {
                                 printf ("%c ", (*caca).caca.vec[i]);
                             }
@@ -174,8 +163,16 @@ int abrirMenuCli(int flag){
                 case '2' :
                     printf ("+----------GERADOR-DE-PALAVRAS-------------+\n");
                     printT ("|  Entre com o numero de palavras: ");
-                    numPalavras
-                    printf (" |\n");                                                                                                         
+                    numpalavras = getd();
+                    for (i = 0; i < 5-calcDig(numpalavras); i++) printf(" ");
+                    printf (" |\n");
+                    for (i = 0; i < numpalavras; i++) {
+                        tabbing ();
+                        printf ("|       Insira a %d palavra: ", i);
+                        for (j = 0; j < 14-calcDig(j); j++) printf(" ");
+                        printf ("|\n");
+                                                
+                    }
 
                 break;
                 case '3' :
@@ -252,18 +249,33 @@ int abrirMenuCli(int flag){
 }
 // Abr\n");e o menu de ncurses
 int abrirMenuNcurses(){
-    initscr();
-    cbreak();
-    noecho();
-    keypad(stdscr, TRUE);
-    attron(A_STANDOUT | A_UNDERLINE);
-    printw("hello world");
-    attron(A_STANDOUT | A_UNDERLINE);    
-    refresh();
-    addstr("I am highlighted!\n");
-    start_color();
-    refresh();    
-    endwin();
+
+    #if __linux__
+        int yMax, xMax;
+        getmaxyx(stdscr, yMax, xMax); // Pegando os valores maximo do terminal
+
+        // Inicializando o Ncurses
+        WINDOW *win = newwin(6, yMax, xMax, 5);
+        initscr();
+        cbreak();
+        noecho();
+        wrefresh(win);
+
+        keypad(stdscr, TRUE); // Para poder usar o teclado
+
+        while (1) {
+            attron(A_STANDOUT | A_UNDERLINE);
+            printw("hello world");
+            attron(A_STANDOUT | A_UNDERLINE);    
+            refresh();
+            addstr("I am highlighted!\n");
+            start_color();
+            wrefresh(win); 
+        }   
+        endwin();
+    #else
+        printf ("\nO ncurses nao esta disponivel para esse sistema operacional")
+    #endif
 }
 // Abre o primeiro menu
 int abrirMenu(int argc, char argv[argc]){
@@ -273,7 +285,8 @@ int abrirMenu(int argc, char argv[argc]){
         else if (!strcmp( argv, "ncurses" )) abrirMenuNcurses();
     }
     else if ( argc == 0 ) {
-        printf("Faltam argumentos.\n");
+        printf ("ue");
+        abrirMenuCli(0);
     }
     return 1;
 
