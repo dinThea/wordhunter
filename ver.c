@@ -14,18 +14,18 @@ int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numP
 }
 
 // Verifica se as palavras no arquivo correspondem as palavras do caca palavras
-int verArquivo(char *flatten, void* _filename, int sizeName){
+int verArquivo(char *flatten, char* _filename, int sizeName){
 
-    int MAX_SIZE = 100, i, j = 0, sz;
-    char (*filename)[sizeName+4] = _filename;
-    FILE* fp = fopen (strcat(*filename, ".txt"), "r");
-    char ch = fgetc(fp);    
+    int MAX_SIZE = 100, i, j = 0;
+    char namefile[sizeName+4], ch;
+    for (i = 0; i < sizeName; i++) {
+        namefile[i] = _filename[i];
+    }
+    FILE* fp = fopen (strcat(namefile, ".txt"), "r");
     char *name = malloc (sizeof(char)*MAX_SIZE);
-    fseek(fp, 0L, SEEK_END);
-    sz = (int)ftell(fp)/2;
-    rewind(fp);
-    for (i = 0; i < sz; i++) {
-        while (!isspace(ch)) {
+    ch = fgetc(fp);
+    while (ch != EOF) {
+        while (!isspace(ch) && ch!=EOF) {
             if (j == MAX_SIZE) name = realloc(name, 2*j);
             name[j] = ch;
             j++;
@@ -33,6 +33,7 @@ int verArquivo(char *flatten, void* _filename, int sizeName){
         }
         name[j] = '\0';
         j=0;
+        ch = fgetc(fp);
         if (strstr(flatten, name) == NULL) return 0;
     }
     return 1;

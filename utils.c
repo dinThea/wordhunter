@@ -148,3 +148,9 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
     
     return finalVec;
 }  
+
+char getRandChar () {
+    srand(rand());
+    int num = rand();
+    return (char) ('A' + (int) (((double) ('Z'-'A'))/ (RAND_MAX) * num));
+}

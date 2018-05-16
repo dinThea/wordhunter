@@ -4,12 +4,12 @@ long int calcDig(long int num) {
     
     if (num == 0) return 0;
     long int dig = 0, cpynum = num;
-    while (cpynum%10==0) {
+    while ((cpynum/10)!=0) {
         dig++;
         cpynum/=10;
     }
 
-    return dig;
+    return dig+1;
 }
 
 /* Comportamento similar ao fgets so que sem quebra de linha
@@ -77,8 +77,8 @@ int getd(){
 // Abre o menu de cli puro
 int abrirMenuCli(){
     
-    int i, j;               // Contadores
-    char sel, aux[100];     // Variaveis auxiliares de selecao e entrada
+    int i, j, k, m, n;               // Contadores
+    char sel, aux[100], ch;     // Variaveis auxiliares de selecao e entrada
     /* Variaveis estaticas para armazenar os Vectors 
         de palavras e do codice de traducao
     */
@@ -96,7 +96,6 @@ int abrirMenuCli(){
         dice de traducao, se nao, cria um
     */
     if ((caca != NULL) && (flatten == NULL)) {
-        printf ("hey");
         int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};   // Tamanho do caca papavras
         char matriz[size[0]][size[1]];                                           // Inicializa uma matriz com o tamanho size
         // Varrendo a matriz
@@ -180,14 +179,23 @@ int abrirMenuCli(){
                     } else {
                         printf ("|                                          |");
                         printf ("\n");
-                        printT ("|  ");
+                        printT ("|");
+
+                        for (i = 0; i < 16 - (*caca).each_size/2; i++) printf (" ");
                         for (i = 0; i < strlen((*caca).caca.vec)+1; i++) {
-                            if ((*caca).caca.vec[i] == separator) { printf ("|\n"); tabbing(); printf("|  "); }
+                            if ((*caca).caca.vec[i] == separator) { 
+                                for (j = 0; j < 16 - (*caca).each_size/2; j++) printf (" ");                        
+                                printf ("|\n"); 
+                                tabbing(); 
+                                printf("|");                                 
+                                for (j = 0; j < 16 - (*caca).each_size/2; j++) printf (" ");                        
+                            }
                             else {
                                 printf ("%c ", (*caca).caca.vec[i]);
                             }
                         }
-                        printf ("                                       |\n");
+                        for (j = 0; j < 10 + (*caca).each_size; j++) printf (" ");                        
+                        printf ("|\n");
                         tabbing();
                         abrirMenuCli();
 
@@ -213,20 +221,73 @@ int abrirMenuCli(){
             sel = getch_(0);
             switch ( sel ) {
                 case '1' :
+                    printf ("+----------GERADOR-DE-PALAVRAS-------------+\n");
+                    printT ("|  Entre com a dimensao do caca palavras:  |\n");
+                    tabbing();
+                    printf ("|  ");
+                    fgets_(aux, 100, 0, 0);
+                    m = strtol(aux, NULL, 10);
+                    printf ("%d ", m);
+                    fgets_(aux, 100, 0, 0);
+                    n = strtol(aux, NULL, 10);
+                    printf ("%d", n);
+                    for (i = 0; i < 33 - calcDig(n) - calcDig(m) + 6; i++) printf (" ");
+                    printf ("|\n");
+                    tabbing ();
+                    char *cp = malloc(m*(n+1)*sizeof(char));
+                    for (i = 0; i < m; i++) {
+                        printf ("|");
+                        for (k = 0; k < 21 - n; k++) printf (" ");                        
+                        for (j = 0; j < n; j++) {
+                            ch = getRandChar();
+                            cp[i*(n+1)+j] = ch;
+                            printf ("%c ", ch);
+                        }
+                        cp[i*(n+1)+j] = '\n';
+                        for (k = 0; k < 21 - n; k++) printf (" ");
+                        printf ("|\n");
+                        tabbing ();
+                    }
+                    caca = NULL;
+                    caca = create_caca(cp, (n+1)*m, n);
+                    flatten = NULL;
+                    abrirMenuCli();
+
                 break;
                 case '2' :
+
                     printf ("+----------GERADOR-DE-PALAVRAS-------------+\n");
-                    printT ("|  Entre com o numero de palavras: ");
-                    numpalavras = getd();
-                    for (i = 0; i < 5-calcDig(numpalavras); i++) printf(" ");
-                    printf (" |\n");
-                    for (i = 0; i < numpalavras; i++) {
-                        tabbing ();
-                        printf ("|       Insira a %d palavra: ", i);
-                        for (j = 0; j < 14-calcDig(j); j++) printf(" ");
+                    printT ("|  Entre com a dimensao do caca palavras:  |\n");
+                    tabbing();
+                    printf ("|  ");
+                    fgets_(aux, 100, 0, 0);
+                    m = strtol(aux, NULL, 10);
+                    printf ("%d ", m);
+                    fgets_(aux, 100, 0, 0);
+                    n = strtol(aux, NULL, 10);
+                    printf ("%d", n);
+                    for (i = 0; i < 33 - calcDig(n) - calcDig(m) + 6; i++) printf (" ");
+                    printf ("|\n");
+                    tabbing ();
+                    char *cacapalavras = malloc(m*(n+1)*sizeof(char));
+                    for (i = 0; i < m; i++) {
+                        printf ("|");
+                        for (k = 0; k < 21 - n; k++) printf (" ");                        
+                        for (j = 0; j < n; j++) {
+                            ch = toupper(getch_(0));
+                            cacapalavras[i*(n+1)+j] = ch;
+                            printf ("%c ", ch);
+                        }
+                        cacapalavras[i*(n+1)+j] = '\n';
+                        for (k = 0; k < 21 - n; k++) printf (" ");
                         printf ("|\n");
-                                                
+                        tabbing ();
                     }
+                    caca = NULL;
+                    caca = create_caca(cacapalavras, (n+1)*m, n);
+                    flatten = NULL;
+                    abrirMenuCli();
+
 
                 break;
                 case '3' :
@@ -315,7 +376,8 @@ int abrirMenuCli(){
                     */
                     printf ("%-33s", aux);
                     printf ("|\n");
-                    if (verArquivo((*flatten).vec, aux, strlen(aux)+1)) printf("TUDO CORRETO");                     
+                    tabbing();
+                    if (verArquivo((*flatten).vec, aux, strlen(aux)+1)) printf("|           TUDO CORRETO%-19c|\n", ' ');                     
                     printT ("+------------------------------------------+\n");
                     tabbing();
                     abrirMenuCli();
