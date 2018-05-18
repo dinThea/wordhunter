@@ -30,6 +30,7 @@ typedef struct siz_t {
 typedef struct cacaPalavra_t {
     int each_size;
     int linhas;
+    int siz;
     Vector caca;
 } Caca;
 
@@ -39,6 +40,7 @@ Caca* create_caca(char* _vetor, int size, int each_size){
     Vector* vec = create_vec(size); 
     
     Caca* caca = malloc(sizeof(Caca) + sizeof(vec)*size);
+    caca->siz = size;
     if (caca != NULL) {
         caca->linhas = size;
         for (i = 0; i < size; i++){

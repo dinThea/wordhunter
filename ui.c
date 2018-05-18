@@ -1,4 +1,5 @@
 //  Interface com usuario
+#define showSiz 17
 
 long int calcDig(long int num) {
     
@@ -21,12 +22,16 @@ char *fgets_(char *string, int n, int mode, int echo) {
     char tmpch;
     int i = n;
     #if __linux__
-        tmpch = mode == 1?toupper(getch_(echo)):getch_(echo);
-        if (!isspace(tmpch)) { *string++ = tmpch; }
+        tmpch = mode == 1?toupper(getch_(0)):getch_(0);
+        if (!isspace(tmpch)) { 
+            *string++ = tmpch; 
+            if (echo) printf ("%c", tmpch);
+        }
         while ((i-- > 0) && !isspace(tmpch)){
-            tmpch = mode == 1?toupper(getch_(echo)):getch_(echo);
+            tmpch = mode == 1?toupper(getch_(0)):getch_(0);
             if (!isspace(tmpch)) {
                 *string++ = tmpch;
+                if (echo) printf ("%c", tmpch);
             }
         }
         *string++ = '\0';
@@ -77,8 +82,8 @@ int getd(){
 // Abre o menu de cli puro
 int abrirMenuCli(){
     
-    int i, j, k, m, n;               // Contadores
-    char sel, aux[100], ch;     // Variaveis auxiliares de selecao e entrada
+    int i, j, k;              // Contadores
+    char sel, aux[100], ch, aux2[100];     // Variaveis auxiliares de selecao e entrada
     /* Variaveis estaticas para armazenar os Vectors 
         de palavras e do codice de traducao
     */
@@ -90,7 +95,7 @@ int abrirMenuCli(){
     /* Contadores estaticos de pontuacao e de numero
         de palavras e de chamada
     */ 
-    static int pontuacao = 0, numpalavras = 0, flag = 0;
+    static int pontuacao = 0, numpalavras = 0, flag = 0, m, n;
     /* Verifica se caca ja foi preenchido por alguma
         funcao de gerar caca palavras e se existe co-
         dice de traducao, se nao, cria um
@@ -156,24 +161,29 @@ int abrirMenuCli(){
                     printT ("|      N. ");
                     // Caso o sistema seja linux, abre a funcao integrada com a biblioteca terminus
                     #if __linux__
-                    fgets_(aux, 100, 0, 0);
+                    fgets_(aux, 100, 0, 1);
                     // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
                     #else                    
-                    fgets_(aux, 100, 0, 0);
+                    fgets_(aux, 100, 0, 1);
                     #endif
                     /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
                         na entrada do teclado
                     */
-                    printf ("%-33s", aux);
+                    memset(aux2, '\0', 99);                   
+                    memset(aux2, ' ', 33-strlen(aux));
+                    printf ("%31s", aux2);
                     printf ("|\n");
                     caca = abrirCp(aux);
                     printT ("+------------------------------------------+\n");
                     tabbing();
+                    m = (*caca).siz/(*caca).each_size;
+                    n = (*caca).each_size;
                     flatten = NULL;
                     abrirMenuCli();
                 break;
                 case '2' :
                     if (caca == NULL) {
+                        tabbing();
                         printf ("+---NENHUM-CACA-PALAVRAS-INICIALIZADO------+\n");
                         abrirMenuCli();
                     } else {
@@ -181,20 +191,26 @@ int abrirMenuCli(){
                         printf ("\n");
                         printT ("|");
 
-                        for (i = 0; i < 16 - (*caca).each_size/2; i++) printf (" ");
-                        for (i = 0; i < strlen((*caca).caca.vec)+1; i++) {
-                            if ((*caca).caca.vec[i] == separator) { 
-                                for (j = 0; j < 16 - (*caca).each_size/2; j++) printf (" ");                        
+                        if (n/2 <= showSiz)
+                            for (i = 0; i < showSiz - n/2; i++) printf (" ");
+                        
+                        for (i = 0; i < m*(n+1)+1; i++) {
+                            if ((*caca).caca.vec[i] == separator) {
+                                if (n/2 <= showSiz)
+                                    for (j = 0; j < showSiz - n/2; j++) printf (" "); 
+                                else printf (" ");                       
                                 printf ("|\n"); 
                                 tabbing(); 
                                 printf("|");                                 
-                                for (j = 0; j < 16 - (*caca).each_size/2; j++) printf (" ");                        
+                                if (n/2 <= showSiz)
+                                    for (j = 0; j < showSiz - n/2; j++) printf (" ");                        
                             }
                             else {
                                 printf ("%c ", (*caca).caca.vec[i]);
                             }
                         }
-                        for (j = 0; j < 10 + (*caca).each_size; j++) printf (" ");                        
+                        if (n/2 <= showSiz)                        
+                            for (j = 0; j < 23 + n/2; j++) printf (" ");                        
                         printf ("|\n");
                         tabbing();
                         abrirMenuCli();
@@ -225,13 +241,13 @@ int abrirMenuCli(){
                     printT ("|  Entre com a dimensao do caca palavras:  |\n");
                     tabbing();
                     printf ("|  ");
-                    fgets_(aux, 100, 0, 0);
+                    fgets_(aux, 100, 0, 1);
                     m = strtol(aux, NULL, 10);
-                    printf ("%d ", m);
-                    fgets_(aux, 100, 0, 0);
+                    printf (" ");
+                    fgets_(aux, 100, 0, 1);
                     n = strtol(aux, NULL, 10);
-                    printf ("%d", n);
-                    for (i = 0; i < 33 - calcDig(n) - calcDig(m) + 6; i++) printf (" ");
+                    memset(aux2, '\0', 99);                    
+                    printf ("%s", memset(aux2, ' ', 33-calcDig(n) - calcDig(m) + 6));                    
                     printf ("|\n");
                     tabbing ();
                     char *cp = malloc(m*(n+1)*sizeof(char));
@@ -260,13 +276,13 @@ int abrirMenuCli(){
                     printT ("|  Entre com a dimensao do caca palavras:  |\n");
                     tabbing();
                     printf ("|  ");
-                    fgets_(aux, 100, 0, 0);
+                    fgets_(aux, 100, 0, 1);
                     m = strtol(aux, NULL, 10);
-                    printf ("%d ", m);
-                    fgets_(aux, 100, 0, 0);
+                    printf (" ");
+                    fgets_(aux, 100, 0, 1);
                     n = strtol(aux, NULL, 10);
-                    printf ("%d", n);
-                    for (i = 0; i < 33 - calcDig(n) - calcDig(m) + 6; i++) printf (" ");
+                    memset(aux2, '\0', 99);                    
+                    printf ("%s", memset(aux2, ' ', 33-calcDig(n) - calcDig(m) + 6));                                        
                     printf ("|\n");
                     tabbing ();
                     char *cacapalavras = malloc(m*(n+1)*sizeof(char));
@@ -299,8 +315,9 @@ int abrirMenuCli(){
             printf ("+------------------PALPITE-----------------+\n");
             printT ("|            Insira um palpite:            |\n");                                                                                                         
             printT ("|      P. ");
-            fgets_(aux, 100, 1, 0);
-            printf ("%-33s", aux);
+            fgets_(aux, 100, 1, 1);
+            memset(aux2, '\0', 99);            
+            printf ("%s", memset(aux2, ' ', 33-strlen(aux)));                                                    
             printf ("|\n");
             //fputs((*flatten).vec, stdout);
             if (strstr((*flatten).vec, aux) != NULL) {
@@ -366,25 +383,58 @@ int abrirMenuCli(){
                     printT ("|      N. ");
                     // Caso o sistema seja linux, abre a funcao integrada com a biblioteca terminus
                     #if __linux__
-                    fgets_(aux, 100, 0, 0);
+                    fgets_(aux, 100, 0, 1);
                     // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
                     #else                    
-                    fgets_(aux,100,0,0);
+                    fgets_(aux,100,0,1);
                     #endif
                     /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
                         na entrada do teclado
                     */
-                    printf ("%-33s", aux);
+                    memset(aux2, '\0', 99);
+                    printf ("%s", memset(aux2, ' ', 33-strlen(aux)));                    
                     printf ("|\n");
                     tabbing();
-                    if (verArquivo((*flatten).vec, aux, strlen(aux)+1)) printf("|           TUDO CORRETO%-19c|\n", ' ');                     
-                    printT ("+------------------------------------------+\n");
+                    if (verArquivo((*flatten).vec, aux, strlen(aux)+1)) {
+                        printf("|           TUDO CORRETO%-19c|\n", ' ');                     
+                        printT ("+------------------------------------------+\n");
+                    } else {
+                        printf ("+------------------------------------------+\n");                        
+                    }
                     tabbing();
                     abrirMenuCli();
 
                 break;
                 case '2' :
 
+                    printf ("+--------INSIRA-O-NUMERO-DE-PALAVRAS-------+\n");
+                    printT ("|      N. ");
+                    int num;
+                    num = getd();
+                    memset(aux2, '\0', 99);
+                    memset(aux2, ' ', 33 - calcDig(num));
+                    fputs(aux2, stdout);
+                    printf ("|\n");
+                    char palavras[num][caca->each_size+1];
+                    for (i = 0; i < num; i++) {
+                        tabbing ();
+                        printf ("|      PALAVRA %d : ", i+1);
+                        fgets_(palavras[i], caca->each_size, 1, 1);
+                        memset(aux2, '\0', 99);
+                        memset(aux2, ' ', 23 - strlen(palavras[i]));
+                        printf (" %s|\n", aux2);
+                    }
+                    printT ("+----------------DIFERENCAS----------------+\n");                    
+                    for (i = 0; i < num; i++) {
+                        fputs (palavras[i], stdout);
+                        if (strstr((*flatten).vec, palavras[i]) == NULL) {
+                            tabbing();
+                            printf ("|      * %-20s|\n");
+                        }
+                    }
+                    printT ("+------------------------------------------+\n");
+                    tabbing();
+                    abrirMenuCli();
                 break;
             }
             return 0;
