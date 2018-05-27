@@ -35,7 +35,7 @@ Caça palavras para o trabalho prático 1 de CAP
         *Guarda um caça-palavras individual Struct ```cacaPalavras_t```
     - Ademais, há as seguintes funções
         * Inicializa um vetor de tamanho indeterminado ```Create_vec (int)```
-        * Deleta o vetor criado anteriormente ```delete_vec ()```
+        * Deleta o vetor criado do tipo Vector ```delete_vec ()```
         * Inicialização do Struct ```Caca (char, int, int)```
 * config.c
     - Inicializa novas defições de io do terminal 
