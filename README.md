@@ -40,9 +40,9 @@ Caça palavras para o trabalho prático 1 de CAP
 * config.c
     - Inicializa novas defições de io do terminal 
         ```#include <termios.h>```
-        para Linux e usa a função getc_()
+        para Linux e usa a função ```getc_()```
         ```#include <conio.h>```
-        para Windows e usa a função getche() 
+        para Windows e usa a função ```getche()``` 
 * gen.c
     - Apresenta as seguintes funções:
         * Gera uma matriz para o caça-palvras ```gerarCp(int, int)```
@@ -62,3 +62,8 @@ Caça palavras para o trabalho prático 1 de CAP
         * Abertura do menu ```abrirmenuCli()```
         * Abre com o menu ncurses ```abrirMenuNcurses()```
         * Abre o primeiro menu com os argumnetos de linha ```abrirMenu(int, char)```
+
+## Criadores
+
+Ricardo Faria            RA: 758598
+Iago Elias               RA: 759027
