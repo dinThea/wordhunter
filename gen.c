@@ -55,5 +55,5 @@ Caca* abrirCp(char *nomeArquivo){
 int gerarCpPalavras(int m, int n, char **palavras){}
 // Abre o terminal para entrar com a matriz com um numero m de linhas e n de colunas
 Caca* lerCp(int m, int n){}
-// Dado uma matriz matriz, gera um numero num de palavras dentro da matriz
+// Dado uma matriz , gera um numero num de palavras dentro da matriz
 char** genPalavras(char **matriz){}

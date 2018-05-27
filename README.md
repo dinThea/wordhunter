@@ -29,7 +29,33 @@ Caça palavras para o trabalho prático 1 de CAP
         * Linearização de vetor para geração de códice linearizarMatriz(void*, size*)
         * Geração de caracter aleatório getRandChar ()
 * datatypes.c
+    - Tem os seguintes tipos de dados:
+        * Guarda um vetor de tamnaho variável Struct Vector_t
+        * Vetor bidimensional siz_t
+        *Guarda um caça-palavras individual Struct cacaPalavras_t
+    - Ademais, há as seguintes funções
+        * Inicializa um vetor de tamanho indeterminado Create_vec (int)
+        * Deleta o vetor criado anteriormente delete_vec ()
+        * Inicialização do Struct Caca (char, int, int)
 * config.c
+    - Inicializa novas defições de io do terminal 
+        ```#include <termios.h>```
+        para Linux e usa a função getc_()
+        ```#include <conio.h>```
+        para Windows e usa a função getche() 
 * gen.c
+    - Apresenta as seguintes funções:
+        * Gera uma matriz para o caça-palvras gerarCp(int, int)
+        * Abre a matriz caça-palavras, dado um certo nome abrirCp(char) 
+        * Gera uma matriz e um vetor de palavras para o caça-palavras gerarCpPalavras(int, int, char)
+        * Mostra o terminal para q se coloque a quantidade de linhas e colunas LerCp(int, int)
+        *Gera um numero de palvras apartir de uma certa matriz genPalavras(char)
 * ver.c
+    - Apresenta as seguintes funções:
+        * Verifica se as palavras fazem parte do vetor de indetificação verPalvras(void, char, int, int)   
+        * Verifica se as no aruvio correponde com as do caça-palavras verArquivo (char, char, int)
 * ui.c
+    - Apresenta as seguintes funções:
+        * Cálculo do número de digitos calcDig (long int)
+        * Escrita dos caracteres do caça-palavras, em uppercase *fgets (char, int, int, int)
+        * Entrada dos inteiros sem pular linhas getd()

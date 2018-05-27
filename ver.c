@@ -1,7 +1,7 @@
 // Verificacao de presenca de palavras na matriz
 #include "stdio.h"
 
-// Verifica se as palavras palavras estao no vetor de identificacao, retorna 0 se nao estiverem
+// Verifica se as palavras estao no vetor de identificacao, retorna 0 se nao estiverem
 int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numPalavras){
 
     int i;
@@ -16,7 +16,7 @@ int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numP
 
 }
 
-// Verifica se as palavras no arquivo correspondem as palavras do caca palavras
+// Verifica se as palavras no arquivo correspondem com as palavras do caca palavras
 int verArquivo(char *flatten, char* _filename, int sizeName){
 
     int MAX_SIZE = 100, i, j = 0;
