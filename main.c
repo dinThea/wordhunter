@@ -15,7 +15,11 @@
 #include "ui.c"
 #define DEFAULT_MENU abrirMenuCli(0)
 
-// Isso e o main, ele e primeira funcao que o gcc vai chamar quando o programa foi chamado no bash
+/*  Objetivo: Isso e o main, ele e primeira funcao que o gcc vai chamar quando o programa foi chamado no bash
+    Parametros formais:
+    (int argc): numero de parametros de entrada
+    (char *argv[]): vetor de string dos parametros de entrada
+*/
 int main (int argc, char *argv[]) {
 
     if (argc == 1) DEFAULT_MENU;                         // Caso nao tenha nenhum argumento, ou seja, abre o menu default

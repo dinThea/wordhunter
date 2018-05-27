@@ -7,26 +7,42 @@
 #define separator '\n'
 #define tab "\t\t"
 
-// Seta pra frente
+/*  Objetivo: Seta pra frente
+    Parametros formais:
+    (char text[]): entrada, sera impresso
+*/
 void printT(char text[]){
     printf (tab);
     printf ("%s", text);    
 }
-// Tabear
+//  Objetivo: Tabear
 void tabbing(){
     printf (tab);
 }
 
-// Retorna o maior inteiro
+/*  Objetivo: Retorna o maior inteiro
+    Parametros formais:
+    (int a, int b): valores de entrada a serem comparados
+*/
 int maior(int a, int b) { return a>=b?a:b; }
 
-// Retorna o menor inteiro
+/*  Objetivo: Retorna o menor inteiro
+    Parametros formais:
+    (int a, int b): valores de entrada a serem comparados
+*/
 int menor(int a, int b) { return a<=b?a:b; }
 
-// Retorna a diferenca entre o maior e o menor
+/*  Objetivo: Retorna a diferenca entre o maior e o menor
+    Parametros formais:
+    (int a, int b): valores de entrada a serem comparados
+*/
 int difMm(int a, int b) { return (maior(a,b) - menor(a,b)); }
 
-// Imprime uma matriz dada
+/*  Objetivo: Imprime uma matriz dada
+    Parametros formais:
+    (void* _matriz): ponteiro de ponteiro para a matriz de entrada
+    (int size[2]): vetor de tamanho
+*/
 int printMatriz(void* _matriz, int size[2]){
     int i, j;
     // printf ("%d %d\n", size[0], size[1]);
@@ -43,7 +59,12 @@ int printMatriz(void* _matriz, int size[2]){
     return 0;
 }
 
-// Inverte um vetor
+/*  Objetivo: Inverte um vetor
+    Parametros formais:
+    (int size): tamanho do vetor de entrada
+    (char vetor[size]): Vetor de entrar a ser invertido
+    (char *newVec): ponteiro para o vetor de saida
+*/  
 int inverterVetor(int size, char vetor[size], char *newVec) {
 
     int i = 0;
@@ -59,8 +80,11 @@ int inverterVetor(int size, char vetor[size], char *newVec) {
     return i;
 }
 /*  
-    Dado uma matriz de strings de tamanho mn, retorna um vetor com os valores 
+    Objetivo: Dado uma matriz de strings de tamanho mn, retorna um vetor com os valores 
     em serie nas verticais, horizontais, diagonais e invertidas
+    Parametros formais:
+    (void *_matriz): ponteiro para ponteiro, parametro de entrada para passar a matriz
+    (int size[2]): vetor do tamanho da matriz
 */
 Vector* linearizarMatriz(void* _matriz, int size[2]) {
 
@@ -146,7 +170,8 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
     return finalVec;
 } 
 
-// Pega um caracter aleatorio
+/*  Objetivo: Gera um caracter aleatorio
+*/
 char getRandChar () {
 
     // Coloca uma seed aaleatoria 

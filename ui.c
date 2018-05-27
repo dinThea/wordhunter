@@ -3,7 +3,10 @@
 #define NUMPAL 99
 #define SIZEPA 20
 
-// Calculo do numero de digitos de um numero
+/*  Objetivo: Calculo do numero de digitos de um numero
+    Parametros formais:
+    (long int num): inteiro cujo numero de digitos sera calculado
+*/
 long int calcDig(long int num) {
     
     // Caso o numero seja 0
@@ -19,10 +22,12 @@ long int calcDig(long int num) {
     return dig+1;
 }
 
-/* Comportamento similar ao fgets so que sem quebra de linha
-    os parametros sao:
-        - mode: define se vai ou nao ser impresso em uppercase
-        - echo: define se os caracteres serao impressos ou nao
+/*  Objetivo: Comportamento similar ao fgets so que sem quebra de linha
+    Parametros formais:
+    (int mode): define se vai ou nao ser impresso em uppercase
+    (int echo): define se os caracteres serao impressos ou nao
+    (char *string): ponteiro para qual a string linda ira apontar
+    (int n): numero maximo de caracteres
 */
 char *fgets_(char *string, int n, int mode, int echo) {
     // Char que guarda o caracter atual
@@ -79,7 +84,8 @@ char *fgets_(char *string, int n, int mode, int echo) {
 
 }
 
-// Entrada de inteiros sem pular linhas
+/*  Objetivos: Retorno de inteiro sem pular linhas
+*/
 int getd(){
 
     int result = 0;
@@ -100,7 +106,8 @@ int getd(){
     return result;
 }
 
-// Abre o menu de cli puro
+/*  Objetivo: Abre o menu de cli puro
+*/
 int abrirMenuCli(){
     
     int i, j, k;              // Contadores
@@ -498,7 +505,8 @@ int abrirMenuCli(){
     abrirMenuCli();
                                                                                                              
 }
-// Abr\n");e o menu de ncurses
+/*  Objetivos: Abre o menu de ncurses
+*/
 int abrirMenuNcurses(){
 
     #if __linux__
@@ -507,7 +515,11 @@ int abrirMenuNcurses(){
         printf ("\nO ncurses nao esta disponivel para esse sistema operacional");
     #endif
 }
-// Abre o primeiro menu, passando os argumentos de linha
+/*  Objetivos: Abre o primeiro menu, passando os argumentos de linha
+    Parametros formais:
+    (int argc): numero de parametros de entrada
+    (char *argv[]): vetor de string dos parametros de entrada
+*/
 int abrirMenu(int argc, char argv[argc]){
 
     if (!strcmp( argv, "cli" )) return abrirMenuCli();              // Caso o argumento seja cli, abre o menu de cli

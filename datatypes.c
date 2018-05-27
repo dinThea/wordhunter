@@ -6,7 +6,10 @@ typedef struct Vector_t {
     char vec[];
 } Vector;
 
-// Cria um vec de tamanho length
+/*  Objetivos: Cria e retorna um vec de tamanho length
+    Parametros formais:
+    (int length): define o tamanho do vec para alocar
+*/
 Vector* create_vec(int length) {
 
     // Aloca o espaco necessario para guardar o vec
@@ -40,7 +43,12 @@ typedef struct cacaPalavra_t {
     Vector caca;
 } Caca;
 
-// Inicializa o struct caca
+/*  Objetivo: Inicializa e retorna o struct caca
+    Parametros formais:
+    (char* _vetor): entrada do vetor a ser colocado no struct
+    (int size): tamanho do vetor
+    (int each_line): tamanho de cada linha do vetor
+*/
 Caca* create_caca(char* _vetor, int size, int each_size){
     
     int i;

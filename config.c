@@ -6,7 +6,10 @@
     enum winsizes { ncols = 10, nlines = 10, xs = 10, ys = 10 };
     static struct termios old, new;
 
-    // Inicializa as novas definicoes de io do terminal
+    /*  Objetivo: Inicializa as novas definicoes de io do terminal
+        Parametros formais:
+        (int echo): decide se vai ou nao mostrar o char
+    */
     void initTermios(int echo) {
         tcgetattr(0, &old); // Pega as velhas configuracoes do terminal
         new = old; // Cria novas configucaoes

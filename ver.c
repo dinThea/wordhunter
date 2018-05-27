@@ -1,7 +1,13 @@
 // Verificacao de presenca de palavras na matriz
 #include "stdio.h"
 
-// Verifica se as palavras estao no vetor de identificacao, retorna 0 se nao estiverem
+/*  Objetivo: Verifica se as palavras estao no vetor de identificacao, retorna 0 se nao estiverem
+    Parametros formais:
+    (void* _palavras): Lista de palavras
+    (char *identificacao): Palavra a ser identificacao
+    (int maiorPalavra): tamanho da maior palavra
+    (int numPalavras): numero de palavras 
+*/
 int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numPalavras){
 
     int i;
@@ -16,7 +22,12 @@ int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numP
 
 }
 
-// Verifica se as palavras no arquivo correspondem com as palavras do caca palavras
+/*  Objetivo: Verifica se as palavras no arquivo correspondem com as palavras do caca palavras
+    Parametros formais:
+    (char *flatten): Vetor que vai recever a matriz linearizada
+    (char *_filename): Nome do arquivo
+    (int sizeName): tamanho do nome
+*/
 int verArquivo(char *flatten, char* _filename, int sizeName){
 
     int MAX_SIZE = 100, i, j = 0;
