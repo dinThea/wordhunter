@@ -7,32 +7,44 @@ Caca* gerarCp(int m, int n){}
 Caca* abrirCp(char *nomeArquivo){
     
     int sz, j=0, i=0, size[] = {0,0};
-    char* _line;
-    char* _newline = NULL;
-    char ch;
-    FILE* fp = fopen(strcat(nomeArquivo, ".txt"), "r");
-    fseek(fp, 0L, SEEK_END);
-    sz = (int)ftell(fp)/2;
-    rewind(fp);
-    _line = malloc (sizeof(char)*sz);
+    char* _line;                                                    // Guarda a linha da matriz 
+    char ch;                                                        // Guarda o char auxiliar
+    FILE* fp = fopen(strcat(nomeArquivo, ".txt"), "r");             // Abre o arquivo nomeArquivo.txt
+    fseek(fp, 0L, SEEK_END);                                        // Acha o final do arquivo
+    sz = (int)ftell(fp)/2;                                          // Diz o numero de caracteres do arquivo
+    rewind(fp);                                                     // Volta o buffer
+    _line = malloc (sizeof(char)*sz);                               // Aloca espaco pra o buffer do caca palavras
+    // Enquanto a posicao do ponteiro nao estiver no final do arquivo
     while (ftell(fp) < sz*2) {
+        // Zera o char temporario
         ch = ' ';
+        // Leitura do caca palavras
         while (ch != '\n' && ch != EOF){
+            // Le caracter a caracter
             ch = fgetc(fp);
-            if (ch != ' ') {
-                if (ch>='A' && ch<='Z') _line[i*size[0] + j] = ch;
+            // Se o caracter nao for ' '
+            if (!isspace(ch)) {
+                // Se ch for uma letra, faz a leitura da matriz em linha
+                if (isupper(ch)) _line[i*size[0] + j] = ch;
+                // Senao joga o separador no buffer
                 else _line[i*size[0] + j] = separator;
                 j++;    
             }
+            // Guarda o valor do tamanho baseado na iteracao
             if ( i == 0 ) size[0] = j;
         }
         j = 0;
         i++;
     }
+    // Guarda o tamanho y
     size[1] = i;
+    // Char que vai guardar os caca palavras ao vez do buffer
     char new[size[0]*size[1]+1];
+    // Fecha o arquivo
     fclose(fp);
+    // Copia o conteudo do _line para o new
     strcpy(new, _line);
+    // Cria o struct caca
     Caca* caca = create_caca(new, size[0]*size[1]+1, size[1]);
     return caca;
 

@@ -100,10 +100,12 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
         else { k = abs(size[0] - i); j = 0; }
         while ( j < size[0] && k < size[1]-1) {
             linearVetor[count] = matriz[j][k];
+            // Le valor a valor da diagonal e atribui tanto para pra linearVetor tanto para aux que guarda as diagonais inversas
             aux[count - cnt] = matriz[size[0] - j - 1][size[1] - k - 2];
             j++;    k++;    count++;
             
         }
+        // Se pular linha guarda o valor do separador
         linearVetor[count] = separator;
         aux[count - cnt] = separator;
         count++;    
@@ -111,13 +113,13 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
 
 
     int val = count - cnt;
-
+    // Inverte a matriz
     for (i = 0; i < val; i++) { 
         if (i!=(count-cnt-2)) {
             if (aux[i] >= 'A' && aux[i] <= 'Z') {
+                // Se nao for letra maiuscula, joga o separador na matriz
                 linearVetor[count] = (aux[i] > 'Z' || aux[i] < 'A') ? separator:aux[i]; 
                 count++; 
-                
             }
             else {
                 if (aux[i+1] < 'A' || aux[i+1] > 'Z'){}
@@ -128,29 +130,29 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
             } 
         }
     }
-    /*printf ("\n");
-    tabbing();
-    for (i = 0; i < count - 1; i++) {
-        printf ("%c ", linearVetor[i] != separator?linearVetor[i]:'\n');
-        if (linearVetor[i] == separator) tabbing();
-        
-    }*/
+
     linearVetor[count] = '\n';
     linearVetor[count++] = '\n';
+
+    // Concatena o vetor de saida com ele mesmo invertido
     siz = inverterVetor(count, linearVetor, linearVetor);    
-    /*for (i = 0; i < 2*count - 1; i++) {
-        printf ("%c ", linearVetor[i] != separator?linearVetor[i]:'\n');
-        if (linearVetor[i] == separator) tabbing();
-        
-    }*/
+
     Vector* finalVec = create_vec(siz);    
+
+    // Para cada termo do vetor e atribuido no struct finalvec 
     for (i = 0; i < siz; i++) { finalVec->vec[i]=linearVetor[i]; }
     
     return finalVec;
-}  
+} 
 
+// Pega um caracter aleatorio
 char getRandChar () {
+
+    // Coloca uma seed aaleatoria 
     srand(rand());
     int num = rand();
+
+    // PEga o intervalo randomico em intervalo de caracteres
     return (char) ('A' + (int) (((double) ('Z'-'A'))/ (RAND_MAX) * num));
+
 }

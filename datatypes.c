@@ -6,12 +6,18 @@ typedef struct Vector_t {
     char vec[];
 } Vector;
 
+// Cria um vec de tamanho length
 Vector* create_vec(int length) {
+
+    // Aloca o espaco necessario para guardar o vec
     Vector* vec = malloc(sizeof(Vector) + length*sizeof(char));
+    // Se nao tiver dado nada errado
     if (vec != NULL) {
+        // atribui o valor para length
         vec->length = length;
     }
     
+    // Retorna o vetor alocado
     return vec;
 }
 
@@ -34,25 +40,34 @@ typedef struct cacaPalavra_t {
     Vector caca;
 } Caca;
 
+// Inicializa o struct caca
 Caca* create_caca(char* _vetor, int size, int each_size){
     
     int i;
+    // Cria o vetor
     Vector* vec = create_vec(size); 
-    
+    // Cria o caca
     Caca* caca = malloc(sizeof(Caca) + sizeof(vec)*size);
+    // Atribui o valor para siz
     caca->siz = size;
+    // Se a atribuicao tiver dado certo, ou seja, se o ponteiro nao for nulo
     if (caca != NULL) {
+        // Salva o numero de linhas
         caca->linhas = size;
+        // Coloca o conteudo de _vetor para vec->vec
         for (i = 0; i < size; i++){
             (*vec).vec[i] = _vetor[i];
         }
+        // Coloca o conteudo de vec->vec para a estrutura de caca palavras
         for (i = 0; i < size; i++){
             (*caca).caca.vec[i] = (*vec).vec[i];
         }
     }
 
+    // Atribui o valor de each_size 
     (*caca).each_size = each_size;
     
+    // Retorna o caca palavras criado
     return caca;
 }
 
@@ -64,65 +79,3 @@ typedef union String_set {
     int color[2];
 
 } Nstring;
-
-typedef struct Rectangles {
-    
-    char identifier[2];
-    int color;
-    int pos[4]; // x0 y0 x1 y1
-
-} Rec_t;
-
-typedef struct Rectangle_set {
-
-    int lenght; 
-    Rec_t rectangles[];
-
-} Curses_t;
-
-Curses_t* addRectangle (Curses_t* preview, int color, int pos[4], char identifier[2]) {
-
-    int i, j;
-    Curses_t* cur;
-    cur = malloc (sizeof(*preview) + sizeof(Rec_t) + sizeof(char)*2 + sizeof(int));
-    if (cur != NULL) {
-        for (i = 0; i < (*preview).lenght; i++)
-            for (j = 0; j < 4; j++) {
-                cur->rectangles[i].color = (*preview).rectangles[i].color;
-                cur->rectangles[i].pos[j] = (*preview).rectangles[i].pos[j];
-                cur->rectangles[i].identifier[0] = (*preview).rectangles[i].identifier[0];
-                cur->rectangles[i].identifier[1] = (*preview).rectangles[i].identifier[1];                                                
-            }
-        cur->rectangles[i].color = color;
-        for (j = 0; j < 4; j++) cur->rectangles[i].pos[j] = pos[j];
-        for (j = 0; j < 2; j++) cur->rectangles[i].identifier[j] = identifier[j];
-        cur->lenght = preview->lenght+1;
-    }
-
-    return cur;
-
-}
-
-// Procura por um retangulo em preview, e o deleta procurando pelo identificador, se nao achar retorna o preview
-Curses_t* deleteRectangle (Curses_t* preview, char identifier[2]) {
-    
-    int i, j, k=0;
-    Curses_t* cur;
-    cur = malloc(sizeof(*preview));
-    for (i = 0; i < (*preview).lenght+k; i++) {
-        if ((*preview).rectangles[i].identifier[0]==identifier[0] && (*preview).rectangles[i].identifier[1]==identifier[1]) {
-            k=1;
-            (*cur).lenght = (*preview).lenght--;
-        }
-        for (j = 0; j < 4; j++) {
-            cur->rectangles[i].color = (*preview).rectangles[i+k].color;
-            cur->rectangles[i].pos[j] = (*preview).rectangles[i+k].pos[j];
-            cur->rectangles[i].identifier[0] = (*preview).rectangles[i+k].identifier[0];
-            cur->rectangles[i].identifier[1] = (*preview).rectangles[i+k].identifier[1];                                                
-        }
-    }
-
-    //cur = realloc(cur, sizeof(cur) - sizeof(Rec_t));
-
-    return cur;
-}
