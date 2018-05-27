@@ -8,14 +8,16 @@ Caca* abrirCp(char *nomeArquivo){
     
     int sz, j=0, i=0, size[] = {0,0};
     char* _line;                                                    // Guarda a linha da matriz 
-    char ch;                                                        // Guarda o char auxiliar
+    char ch = ' ';                                                  // Guarda o char auxiliar
     FILE* fp = fopen(strcat(nomeArquivo, ".txt"), "r");             // Abre o arquivo nomeArquivo.txt
     fseek(fp, 0L, SEEK_END);                                        // Acha o final do arquivo
-    sz = (int)ftell(fp)/2;                                          // Diz o numero de caracteres do arquivo
+    sz = 50 + (int)ftell(fp)/2;                                          // Diz o numero de caracteres do arquivo
     rewind(fp);                                                     // Volta o buffer
+    
     _line = malloc (sizeof(char)*sz);                               // Aloca espaco pra o buffer do caca palavras
+    fseek (fp, 4*sizeof(char), SEEK_SET);
     // Enquanto a posicao do ponteiro nao estiver no final do arquivo
-    while (ftell(fp) < sz*2) {
+    while (ftell(fp) < sz*2 && ch != EOF) {
         // Zera o char temporario
         ch = ' ';
         // Leitura do caca palavras
@@ -23,12 +25,12 @@ Caca* abrirCp(char *nomeArquivo){
             // Le caracter a caracter
             ch = fgetc(fp);
             // Se o caracter nao for ' '
-            if (!isspace(ch)) {
+            if (ch != ' ') {
                 // Se ch for uma letra, faz a leitura da matriz em linha
                 if (isupper(ch)) _line[i*size[0] + j] = ch;
-                // Senao joga o separador no buffer
                 else _line[i*size[0] + j] = separator;
-                j++;    
+                // Senao joga o separador no buffer                
+                j++;
             }
             // Guarda o valor do tamanho baseado na iteracao
             if ( i == 0 ) size[0] = j;

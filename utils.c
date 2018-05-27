@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #define separator '\n'
 #define tab "\t\t"
 
@@ -151,8 +152,17 @@ char getRandChar () {
     // Coloca uma seed aaleatoria 
     srand(rand());
     int num = rand();
-
+    srand(rand());
     // PEga o intervalo randomico em intervalo de caracteres
     return (char) ('A' + (int) (((double) ('Z'-'A'))/ (RAND_MAX) * num));
+
+}
+
+int getRandInterval (int lim1, int lim2) {
+    
+    srand(rand());
+    int num = rand();
+    srand(rand());
+    return (int) (lim1 + (int) (((double) (lim2 - lim1))/ (RAND_MAX) * num));
 
 }

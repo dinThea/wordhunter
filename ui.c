@@ -1,5 +1,7 @@
 //  Interface com usuario
 #define showSiz 17
+#define NUMPAL 99
+#define SIZEPA 20
 
 // Calculo do numero de digitos de um numero
 long int calcDig(long int num) {
@@ -179,16 +181,7 @@ int abrirMenuCli(){
                 case '1' :
                     printf ("+---INSIRA-O-NOME-DO-ARQUIVO-SEM-(.txt)----+\n");
                     printT ("|      N. ");
-                    // Caso o sistema seja linux, abre a funcao integrada com a biblioteca terminus
-                    #if __linux__
                     fgets_(aux, 100, 0, 1);
-                    // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
-                    #else                    
-                    fgets_(aux, 100, 0, 1);
-                    #endif
-                    /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
-                        na entrada do teclado
-                    */
                     // Preence o buffer aux2 de \0
                     memset(aux2, '\0', 99);
                     // Preence o buffer de aux2 de ' '                   
@@ -197,6 +190,7 @@ int abrirMenuCli(){
                     printf ("%31s", aux2);
                     printf ("|\n");
                     // Abre o caca palavras
+                    free(caca);
                     caca = abrirCp(aux);
                     printT ("+------------------------------------------+\n");
                     tabbing();
@@ -305,11 +299,24 @@ int abrirMenuCli(){
                     tabbing();
                     printf ("|     ");
                     fgets_(aux, 100, 0, 1);
-                    n = strtol(aux, NULL, 10);
+                    int numpalavras = strtol(aux, NULL, 10);
                     memset(aux2, '\0', 99);                    
-                    printf ("%s", memset(aux2, ' ', 33-calcDig(n) - calcDig(m) + 6));                                        
-                    printf ("|\n");
-                    tabbing ();
+                    printf ("%s", memset(aux2, ' ', 33-calcDig(n) - calcDig(m) + 5));                                        
+                    printf ("\n");
+                    tabbing();
+                    k = 0;
+                    i = 0;
+                    printf ("| ");                                            
+                    while (k < numpalavras) {
+                        printf ("%c", (*caca).caca.vec[i]);
+                        if ((*caca).caca.vec[i] == '\n') {
+                            tabbing();
+                            if (k < numpalavras-1)
+                                printf ("| ");                        
+                            k++;
+                        }
+                        i++;
+                    }
 
                 break;
                 case '3' :
