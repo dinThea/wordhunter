@@ -157,12 +157,3 @@ char getRandChar () {
     return (char) ('A' + (int) (((double) ('Z'-'A'))/ (RAND_MAX) * num));
 
 }
-
-int getRandInterval (int lim1, int lim2) {
-    
-    srand(rand());
-    int num = rand();
-    srand(rand());
-    return (int) (lim1 + (int) (((double) (lim2 - lim1))/ (RAND_MAX) * num));
-
-}
