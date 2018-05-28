@@ -327,7 +327,7 @@ int abrirMenuCli(){
 
                 break;
                 case '3' :
-
+                
                     printf ("+----------GERADOR-DE-PALAVRAS-------------+\n");
                     printT ("|  Entre com a dimensao do caca palavras:  |\n");
                     tabbing();
@@ -519,7 +519,8 @@ int abrirMenuNcurses(){
     Parametros formais:
     (int argc): numero de parametros de entrada
     (char *argv[]): vetor de string dos parametros de entrada
-*/
+*/ 
+
 int abrirMenu(int argc, char argv[argc]){
 
     if (!strcmp( argv, "cli" )) return abrirMenuCli();              // Caso o argumento seja cli, abre o menu de cli
