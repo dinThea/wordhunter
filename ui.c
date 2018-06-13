@@ -115,7 +115,7 @@ int abrirMenuCli(){
     /* Variaveis estaticas para armazenar os Vectors 
         de palavras e do codice de traducao
     */
-    static Vector* flatten = NULL, *palavras = NULL;                                
+    static Codex* flatten = NULL, *palavras = NULL;                                
     /* Armazena estaticamente e dinamicamente o caca
         palavras
     */                                                   
@@ -136,6 +136,7 @@ int abrirMenuCli(){
             for (j = 0; j < (*caca).linhas/size[0] - 1; j++) {
                 // Como a matriz esta salva de forma linear em caca, e necessario deslinearizar
                 int index = i*(*caca).linhas/size[0] + j;
+                printf ("%c", (*caca).caca.vec[index]);
                 matriz[i][j] = (*caca).caca.vec[index];
             }
         }
@@ -222,7 +223,7 @@ int abrirMenuCli(){
                         for (i = 0; i < showSiz - n/2; i++) printf (" ");
                         
                         for (i = 0; i < m*(n+1)+1; i++) {
-                            if ((*caca).caca.vec[i] == separator) {
+                            if (*((*caca).caca.vec[i]) == separator) {
                                 if (n/2 <= showSiz)
                                     for (j = 0; j < showSiz - n/2; j++) printf (" "); 
                                 else printf (" ");                       
@@ -233,7 +234,7 @@ int abrirMenuCli(){
                                     for (j = 0; j < showSiz - n/2; j++) printf (" ");                        
                             }
                             else {
-                                printf ("%c ", (*caca).caca.vec[i]);
+                                printf ("%c ", *((*caca).caca.vec[i]));
                             }
                         }
 
@@ -407,10 +408,11 @@ int abrirMenuCli(){
                     printf ("| ");
                     for (i = 0; i < (*flatten).length; i++) {
 
-                        if ((*flatten).vec[i] != separator) printf ("%c",(*flatten).vec[i]);
+                        if (*((*flatten).vec[i]) != separator) printf ("%c",*((*flatten).vec[i]));
                         else { printf ("\n"); printT ("| "); }
                         
                     }
+                    *((*flatten).vec[3]) = '3';
                     printf ("\n");
                     tabbing();
                     abrirMenuCli();

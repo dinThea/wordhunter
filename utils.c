@@ -86,7 +86,7 @@ int inverterVetor(int size, char vetor[size], char *newVec) {
     (void *_matriz): ponteiro para ponteiro, parametro de entrada para passar a matriz
     (int size[2]): vetor do tamanho da matriz
 */
-Vector* linearizarMatriz(void* _matriz, int size[2]) {
+Codex* linearizarMatriz(void* _matriz, int size[2]) {
 
     int i, j, k, l, cnt, count = 0, siz, siz1 = size[1]-1;
     // Casting de tipo
@@ -94,7 +94,8 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
     // Definindo o tamanho do vetor linear
     int linearSize = 2*(size[0] + 1)*(size[1] + 1)*4+(int)pow(menor(size[1] + 1, size[0] + 1), 2)+(int)(abs(size[0] - size[1]))+1;
     // Define o array que vai guardar todo os valores
-    char linearVetor[linearSize*sizeof(char)];
+    char *linearVetor = malloc(linearSize*sizeof(char));
+    char *pontaux = linearVetor;
     // Atribuindo ponteiros para poder fazer tudo no mesmo grupo iterador
     int *it1 = &j, *it2 = &k;
     int *sz1 = &size[0], *sz2 = &siz1;
@@ -108,7 +109,7 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
         // Varrendo de fato
         for (*it1 = 0; *it1 < (*sz1); (*it1)++){
             for (*it2 = 0; *it2 < (*sz2); (*it2)++){
-                linearVetor[count] = matriz[j][k];
+                linearVetor[count] = &matriz[j][k];
                 count++;
             }
             linearVetor[count] = separator;
@@ -117,16 +118,17 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
         }   
     }
 
-    char aux[(size[1]+1)*(size[0]+1)];  cnt = count;
+    char *aux = malloc((size[1]+1)*(size[0]+1));
+    cnt = count;
     // Varrendo as diagonais
     for (i = 0; i < 2*menor(size[1] + 1, size[0] + 1) + (int)abs( size[0] - size[1] ); i++){
         // Define uma rotina diferente caso o valor seja abaixo da diagonal principal
         if (i < size[0]) { j = size[0] - i - 1; k = 0; }
         else { k = abs(size[0] - i); j = 0; }
         while ( j < size[0] && k < size[1]-1) {
-            linearVetor[count] = matriz[j][k];
+            linearVetor[count] = &matriz[j][k];
             // Le valor a valor da diagonal e atribui tanto para pra linearVetor tanto para aux que guarda as diagonais inversas
-            aux[count - cnt] = matriz[size[0] - j - 1][size[1] - k - 2];
+            aux[count - cnt] = &matriz[size[0] - j - 1][size[1] - k - 2];
             j++;    k++;    count++;
             
         }
@@ -162,10 +164,10 @@ Vector* linearizarMatriz(void* _matriz, int size[2]) {
     // Concatena o vetor de saida com ele mesmo invertido
     siz = inverterVetor(count, linearVetor, linearVetor);    
 
-    Vector* finalVec = create_vec(siz);    
+    Codex* finalVec = create_codex(siz);    
 
     // Para cada termo do vetor e atribuido no struct finalvec 
-    for (i = 0; i < siz; i++) { finalVec->vec[i]=linearVetor[i]; }
+    for (i = 0; i < siz; i++) { finalVec->vec[i]=&linearVetor[i]; }
     
     return finalVec;
 } 

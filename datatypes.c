@@ -6,6 +6,28 @@ typedef struct Vector_t {
     char vec[];
 } Vector;
 
+// Wrap para salvar o codice
+typedef struct Vector_codex {
+    int length;
+    char *vec[];
+} Codex;
+
+/*  Objetivos: Cria e retorna um vec de tamanho length
+    Parametros formais:
+    (int length): define o tamanho do vec para alocar
+*/
+Codex* create_codex(int length) {
+
+    // Aloca o espaco para guardar o codice
+    Codex* cod = malloc(sizeof(Codex) + length*sizeof(void));
+    // Caso nao tenha alocado
+    if (cod != NULL) { 
+        cod -> length = length;
+    }
+
+    return cod;
+}
+
 /*  Objetivos: Cria e retorna um vec de tamanho length
     Parametros formais:
     (int length): define o tamanho do vec para alocar
@@ -40,7 +62,7 @@ typedef struct cacaPalavra_t {
     int each_size;
     int linhas;
     int siz;
-    Vector caca;
+    Codex caca;
 } Caca;
 
 /*  Objetivo: Inicializa e retorna o struct caca
