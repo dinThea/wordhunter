@@ -3,6 +3,15 @@
 #define NUMPAL 99
 #define SIZEPA 20
 
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_MAGENTA "\x1b[35m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+#define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_BACKCOLOR_BLACK "\x1b[40m"
+
 /*  Objetivo: Calculo do numero de digitos de um numero
     Parametros formais:
     (long int num): inteiro cujo numero de digitos sera calculado
@@ -130,28 +139,41 @@ int abrirMenuCli(){
     */
     if ((caca != NULL) && (flatten == NULL)) {
         int size[2] = {(*caca).each_size, ((*caca).linhas/(*caca).each_size)};   // Tamanho do caca papavras
-        char matriz[size[0]][size[1]];                                           // Inicializa uma matriz com o tamanho size
+        char *matriz[size[0]][size[1]];                                           // Inicializa uma matriz com o tamanho size
         // Varrendo a matriz
         for (i = 0; i < size[0]; i++) {
             for (j = 0; j < (*caca).linhas/size[0] - 1; j++) {
                 // Como a matriz esta salva de forma linear em caca, e necessario deslinearizar
                 int index = i*(*caca).linhas/size[0] + j;
-                printf ("%c", (*caca).caca.vec[index]);
-                matriz[i][j] = (*caca).caca.vec[index];
+                // printf ("%c", (*caca).caca.vec[index]);
+                matriz[i][j] = &(*caca).caca.vec[index];
             }
         }
 
         /* Chama a funcao de linearizar a matriz
             de forma a chamar um codice de busca
-        */ 
-        flatten = linearizarMatriz(matriz, size);
+        */
+       printf ("%d %d\n", size[0], size[1]);
+        for (i = 0; i < 4; i++){
+            for (j = 0; j < 4; j++) printf ("%x ", matriz[i][j]);
+            printf ("\n");
+        }
+
+        for (i = 0; i < size[0]; i++){
+            for (j = 0; j < size[1] - 1; j++) printf ("%c ", *matriz[i][j]);
+            printf ("\n");
+        }
+
+        size[0] = i;
+        size[1] = j;
+        flatten = linearizarMatriz(matriz[0][0], size);
 
     }
 
     // Testando se e a primeira vez que a funcao e chamada
     if (flag == 0) {
-        printf ("                                                                               \n");                                                                                                                      
-        printf ("I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
+        printf (ANSI_COLOR_BLUE "                                                                               \n" ANSI_COLOR_RESET);                                                                                                                      
+        printf (ANSI_BACKCOLOR_BLACK "I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
         printf ("`8b       d8b       d8'  88        88  88        88  8888b     88       88     \n");
         printf ("  8,     ,8'8,     ,8'   88        88  88        88  88 `8b    88       88     \n");
         printf ("  Y8     8P Y8     8P    88aaaaaaaa88  88        88  88  `8b   88       88     \n");
@@ -406,9 +428,11 @@ int abrirMenuCli(){
             switch ( sel ) {
                 case '1' :
                     printf ("| ");
-                    for (i = 0; i < (*flatten).length; i++) {
+                    //printf ("%c", *(flatten->vec[0]));
+                    //fputc ('a', stdout);
+                    for (i = 0; i < 100; i++) {
 
-                        if (*((*flatten).vec[i]) != separator) printf ("%c",*((*flatten).vec[i]));
+                        if (*((*flatten).vec[i]) != separator) printf ("%c",*(flatten->vec[i]));
                         else { printf ("\n"); printT ("| "); }
                         
                     }

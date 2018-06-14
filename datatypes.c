@@ -64,6 +64,7 @@ typedef struct cacaPalavra_t {
     int siz;
     Codex caca;
 } Caca;
+ 
 
 /*  Objetivo: Inicializa e retorna o struct caca
     Parametros formais:
