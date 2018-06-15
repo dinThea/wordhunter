@@ -9,8 +9,8 @@
 #define ANSI_COLOR_BLUE    "\x1b[34m"
 #define ANSI_COLOR_MAGENTA "\x1b[35m"
 #define ANSI_COLOR_CYAN    "\x1b[36m"
-#define ANSI_COLOR_RESET   "\x1b[0m"
-#define ANSI_BACKCOLOR_BLACK "\x1b[40m"
+#define ANSI_COLOR_BLACK   "\x1b[30m"
+#define ANSI_BOLD          "\x1b[1m" 
 
 /*  Objetivo: Calculo do numero de digitos de um numero
     Parametros formais:
@@ -119,12 +119,12 @@ int getd(){
 */
 int abrirMenuCli(){
     
-    int i, j, k;              // Contadores
+    int i, j, k, l;              // Contadores
     char sel, aux[100], ch, aux2[100];     // Variaveis auxiliares de selecao e entrada
     /* Variaveis estaticas para armazenar os Vectors 
         de palavras e do codice de traducao
     */
-    static Codex* flatten = NULL, *palavras = NULL;                                
+    static Codex *flatten = NULL, *palavras = NULL;
     /* Armazena estaticamente e dinamicamente o caca
         palavras
     */                                                   
@@ -150,30 +150,18 @@ int abrirMenuCli(){
             }
         }
 
-        /* Chama a funcao de linearizar a matriz
-            de forma a chamar um codice de busca
-        */
-       printf ("%d %d\n", size[0], size[1]);
-        for (i = 0; i < 4; i++){
-            for (j = 0; j < 4; j++) printf ("%x ", matriz[i][j]);
-            printf ("\n");
-        }
-
-        for (i = 0; i < size[0]; i++){
-            for (j = 0; j < size[1] - 1; j++) printf ("%c ", *matriz[i][j]);
-            printf ("\n");
-        }
-
         size[0] = i;
         size[1] = j;
         flatten = linearizarMatriz(matriz[0][0], size);
+        palavras = NULL;
+        palavras = create_codex(flatten->length);
 
     }
 
     // Testando se e a primeira vez que a funcao e chamada
     if (flag == 0) {
         printf (ANSI_COLOR_BLUE "                                                                               \n" ANSI_COLOR_RESET);                                                                                                                      
-        printf (ANSI_BACKCOLOR_BLACK "I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
+        printf ("I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
         printf ("`8b       d8b       d8'  88        88  88        88  8888b     88       88     \n");
         printf ("  8,     ,8'8,     ,8'   88        88  88        88  88 `8b    88       88     \n");
         printf ("  Y8     8P Y8     8P    88aaaaaaaa88  88        88  88  `8b   88       88     \n");
@@ -188,8 +176,9 @@ int abrirMenuCli(){
     printT ("|      1. Abrir/Vizualizar caca palavras   | \n");                                                                                                         
     printT ("|      2. Gerar caca palavras              | \n");  
     printT ("|      3. Validar caca palavras            | \n"); 
-    printT ("|      4. DEBUG                            | \n");                                                                                                           
-    printT ("|      5. Sair                             | \n");                                                                                                         
+    printT ("|      4. DEBUG                            | \n"); 
+    printT ("|      5. Inserir palavra                  | \n");                                                                                                              
+    printT ("|      6. Sair                             | \n");                                                                                                         
     printT ("+------------------------------------------+ \n");
     tabbing();
     // Lendo a entrada e gerando a arvore de selecao
@@ -244,8 +233,8 @@ int abrirMenuCli(){
 
                         for (i = 0; i < showSiz - n/2; i++) printf (" ");
                         
-                        for (i = 0; i < m*(n+1)+1; i++) {
-                            if (*((*caca).caca.vec[i]) == separator) {
+                        for (i = 0; i < m*(n+1); i++) {
+                            if (((*caca).caca.vec[i]) == separator) {
                                 if (n/2 <= showSiz)
                                     for (j = 0; j < showSiz - n/2; j++) printf (" "); 
                                 else printf (" ");                       
@@ -256,11 +245,34 @@ int abrirMenuCli(){
                                     for (j = 0; j < showSiz - n/2; j++) printf (" ");                        
                             }
                             else {
-                                printf ("%c ", *((*caca).caca.vec[i]));
+                                int sinal = 0;
+                                for (j = 0; j < palavras->length; j++) {
+                                    if (&((*caca).caca.vec[i]) == palavras->vec[j]) {
+                                        sinal++;
+                                        break;
+                                    }
+                                }
+                                if (sinal) { 
+                                    sinal = 0;
+                                    printf (ANSI_BACKCOLOR_BLACK ANSI_BOLD ANSI_COLOR_BLACK "%c" ANSI_COLOR_RESET, ((*caca).caca.vec[i]));
+                                    for (j = 0; j < palavras->length; j++) {
+                                        if (&((*caca).caca.vec[i+1]) == palavras->vec[j]) {
+                                            sinal++;
+                                        }
+                                    }
+                                    if (sinal) printf (ANSI_BACKCOLOR_BLACK ANSI_BOLD ANSI_COLOR_BLACK " " ANSI_COLOR_RESET);
+                                    else printf (" ");
+                                } else {
+                                    if (isalpha((*caca).caca.vec[i])) {
+                                        printf ("%c ", ((*caca).caca.vec[i]));
+                                    } else {
+                                        break;
+                                    }
+                                }
                             }
                         }
 
-                        // for (j = 0; j < 2*showSiz - n + 1; j++) printf (" ");                        
+                        for (j = 0; j < 40; j++) printf (" ");                        
 
                         printf ("|\n");
                         tabbing();
@@ -428,11 +440,9 @@ int abrirMenuCli(){
             switch ( sel ) {
                 case '1' :
                     printf ("| ");
-                    //printf ("%c", *(flatten->vec[0]));
-                    //fputc ('a', stdout);
-                    for (i = 0; i < 100; i++) {
+                    for (i = 0; i < flatten->length-1; i++) {
 
-                        if (*((*flatten).vec[i]) != separator) printf ("%c",*(flatten->vec[i]));
+                        if (*((*flatten).vec[i]) != separator) printf ("%c ",*(flatten->vec[i]));
                         else { printf ("\n"); printT ("| "); }
                         
                     }
@@ -477,8 +487,8 @@ int abrirMenuCli(){
                     printf ("%s", memset(aux2, ' ', 33-strlen(aux)));                    
                     printf ("|\n");
                     tabbing();
-                    if (verArquivo((*flatten).vec, aux, strlen(aux)+1)) {
-                        printf("|           TUDO CORRETO%-19c|\n", ' ');                     
+                    if (verArquivo(flatten, aux, strlen(aux)+1, flatten->length, palavras)) {
+                        printf("|           TUDO CORRETO%-19c|\n", ' ');
                         printT ("+------------------------------------------+\n");
                     } else {
                         printf ("+------------------------------------------+\n");                        
@@ -497,23 +507,74 @@ int abrirMenuCli(){
                     memset(aux2, ' ', 33 - calcDig(num));
                     fputs(aux2, stdout);
                     printf ("|\n");
-                    char palavras[num][caca->each_size+1];
+                    char _palavras[num][caca->each_size+1];
                     for (i = 0; i < num; i++) {
                         tabbing ();
                         printf ("|      PALAVRA %d : ", i+1);
-                        fgets_(palavras[i], caca->each_size, 1, 1);
+                        fgets_(_palavras[i], caca->each_size, 1, 1);
                         memset(aux2, '\0', 99);
-                        memset(aux2, ' ', 23 - strlen(palavras[i]));
+                        memset(aux2, ' ', 23 - strlen(_palavras[i]));
                         printf (" %s|\n", aux2);
                     }
-                    printT ("+----------------DIFERENCAS----------------+\n");                    
+                    printT ("+----------------DIFERENCAS----------------+\n");  
+                    int count = 0;
+                    int countPalavras = 0;
+                  
                     for (i = 0; i < num; i++) {
-                        if (strstr((*flatten).vec, palavras[i]) == NULL) {
+                        // Caso o valor do termo do arquivo for nulo, a funcao retornara a zero
+                        for (j = 0; j < flatten->length - strlen(_palavras[i]); j++) {
+                            if (count == strlen(_palavras[i])) break;                                    
+                            for (k = 0; k < strlen(_palavras[i]); k++) {
+                                printf ("%c", *(flatten->vec[j+k]));
+                                if (count == strlen(_palavras[i])) break;                                        
+                                if (*(flatten->vec[j+k]) == _palavras[i][k]){
+                                    count++;
+                                    if (count == strlen(_palavras[i])) {
+                                        for (l = 0; l < strlen(_palavras[i]); l++) {
+                                            palavras->vec[countPalavras] = flatten->vec[j+k-l];
+                                            countPalavras++;
+                                            //printf ("%c\n", *(_palavras->vec[countPalavras]));         
+                                        }
+                                        break;
+                                    }
+                                } else {
+                                    count=0;                   
+                                    break;
+                                }
+                            }
+                        }
+                        if (count != strlen(_palavras[i])) {
+                            for (j = flatten->length - 2; j >= 0; j--) {
+                                if (count == strlen(_palavras[i])) break;                                    
+                                for (k = 0; k < strlen(_palavras[i]); k++) {
+                                    if (count == strlen(_palavras[i])) break;                                        
+                                    if (*(flatten->vec[j-k]) == _palavras[i][k]){
+                                        count++;                        
+                                        if (count == strlen(_palavras[i])) {
+                                            for (l = 0; l < strlen(_palavras[i]); l++) {
+                                                palavras->vec[countPalavras] = flatten->vec[j-k+l];
+                                                // printf ("%c\n", *(palavras->vec[countPalavras]));                                     
+                                                countPalavras++;
+                                            }
+                                            break;
+                                        }
+                                    } else {
+                                        count=0;                   
+                                        break;
+                                    }
+                                }
+                            }
+
+                        }
+                        if (count != strlen(_palavras[i])) {
                             tabbing();
                             memset(aux2, '\0', 99);
-                            memset(aux2, ' ', 33 - strlen(palavras[i]));
-                            printf ("|      * %s%s |\n", palavras, aux2);
+                            memset(aux2, ' ', 33 - strlen(_palavras[i]));
+                            printf ("|      * %s%s |\n", _palavras[i], aux2);
                         }
+
+                        // for (i = 0; i < countPalavras-1; i++) printf ("%c", *(palavras->vec[i]));
+
                     }
                     printT ("+------------------------------------------+\n");
                     tabbing();
@@ -523,6 +584,55 @@ int abrirMenuCli(){
             return 0;
         break;
         case '5' :
+            printf ("+---INSIRA-A-PALAVRA-----------------------+\n");
+            printT ("|      N. ");
+            // Caso o sistema seja linux, abre a funcao integrada com a biblioteca terminus
+            #if __linux__
+            fgets_(aux, 100, 1, 1);
+            // Caso o sistema seja windows, abre a funcao integrada com a biblioteca conio
+            #else                    
+            fgets_(aux,100,1,1);
+            #endif
+            /* As funcoes padroes do stdio nao foram usadas por darem echo automaticamente
+                na entrada do teclado
+            */
+            memset(aux2, '\0', 99);
+            printf ("%s", memset(aux2, ' ', 33-strlen(aux)));                    
+            printf ("|\n");
+            tabbing();
+            printf ("%d\n", strlen(aux));
+            int count = 0;
+            for (j = 0; j < strlen(aux); j++) {
+                for (i = 0; i < flatten->length; i++) {
+                    for (k = 0; k < palavras->length; k++) {
+                        if (flatten->vec[i+j] != palavras->vec[k]) {
+                            if (*flatten->vec[i+j] == separator) {
+                                count = 0;
+                                k = 0;
+                                i++;
+                            }
+                        } else {
+                            count = 0;
+                            k = 0;
+                            i++;
+                        }
+                    }
+                    count++;
+                    if (count == strlen(aux)) {
+                        for (k = 0; k < strlen(aux); k++) {
+                            //printf ("%d\n", i+j-k);
+                            *flatten->vec[i+j-k] = aux[strlen(aux)-k-1];
+                            palavras->vec[palavras->length] = flatten->vec[i+j-k];
+                            palavras->length++; 
+                        }
+                        break;
+                    }
+                }
+                if (count == strlen(aux)) break;
+            }
+            tabbing();
+        break;
+        case '6' :
             printf ("+------------------SAINDO------------------+\n");
             exit(0);
         break;

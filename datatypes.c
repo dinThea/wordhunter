@@ -19,7 +19,7 @@ typedef struct Vector_codex {
 Codex* create_codex(int length) {
 
     // Aloca o espaco para guardar o codice
-    Codex* cod = malloc(sizeof(Codex) + length*sizeof(void));
+    Codex* cod = malloc(sizeof(Codex) + length*sizeof(char*));
     // Caso nao tenha alocado
     if (cod != NULL) { 
         cod -> length = length;
@@ -29,7 +29,7 @@ Codex* create_codex(int length) {
 }
 
 /*  Objetivos: Cria e retorna um vec de tamanho length
-    Parametros formais:
+    Parametros formais: 
     (int length): define o tamanho do vec para alocar
 */
 Vector* create_vec(int length) {

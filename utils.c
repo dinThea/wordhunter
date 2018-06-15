@@ -18,7 +18,7 @@ void printT(char text[]){
 void tabbing(){
     printf (tab);
 }
-const char separator = '\n';
+char separator = '\n';
 
 /*  Objetivo: Retorna o maior inteiro
     Parametros formais:
@@ -88,7 +88,7 @@ int inverterVetor(int size, char *vetor, char *newVec) {
 */
 Codex* linearizarMatriz(void* _matriz, int size[2]) {
 
-    int i, j, k, l, cnt, count = 0, siz, siz1 = size[1]-1;
+    int i, j, k, l, cnt, count = 0, siz = 0, siz1 = size[1]-1;
     char valueSaver[size[0]][size[1]];    
     //printf ("\n%d\n", &(*_matriz));
     //char (*matriz)[size[0]][size[1]] = _matriz;
@@ -117,9 +117,10 @@ Codex* linearizarMatriz(void* _matriz, int size[2]) {
         if (i == 1) {
             it1 = &k;           it2 = &j;
             sz1 = &siz1;         sz2 = &size[0];
+            siz = 1;
         }
         // Varrendo de fato
-        for (*it1 = 0; *it1 < (*sz1); (*it1)++){
+        for (*it1 = 0; *it1 < (*sz1) + siz; (*it1)++){
             for (*it2 = 0; *it2 < (*sz2); (*it2)++){
                 linearVetor[count] = matriz[j][k];
                 // printf ("%c ", *linearVetor[count]);
@@ -131,7 +132,7 @@ Codex* linearizarMatriz(void* _matriz, int size[2]) {
         }   
     }
 
-    char **aux = malloc((size[1]+1)*(size[0]+1));
+    char **aux = malloc(sizeof(char*)*(size[1]+1)*(size[0]+1));
     cnt = count;
     // Varrendo as diagonais
     for (i = 0; i < 2*menor(size[1] + 1, size[0] + 1) + (int)abs( size[0] - size[1] ); i++){
@@ -145,10 +146,11 @@ Codex* linearizarMatriz(void* _matriz, int size[2]) {
             linearVetor[count] = ptr;
             // Le valor a valor da diagonal e atribui tanto para pra linearVetor tanto para aux que guarda as diagonais inversas
             aux[count - cnt] = matriz[size[0] - j - 1][size[1] - k - 1];
-            //printf ("%c ", *aux[count - cnt]);
+            // printf ("%c ", *aux[count - cnt]);
             j++;    k++;    count++;
             
         }        
+        // printf ("\n");
         // Se pular linha guarda o valor do separador
         linearVetor[count] = &separator;
         aux[count - cnt] = &separator;
@@ -159,28 +161,13 @@ Codex* linearizarMatriz(void* _matriz, int size[2]) {
     }
 
     int val = count - cnt;
-    printf ("%d ", val);
     // Inverte a matriz
     for (i = 0; i < val - 1; i++) { 
-        printf ("%d\n", i);
-        if (i!=(count-cnt-2)) {
-            if (*aux[i] >= 'A' && *aux[i] <= 'Z') {
-                // Se nao for letra maiuscula, joga o separador na matriz
-                linearVetor[count] = (*aux[i] > 'Z' || *aux[i] < 'A') ? &separator:aux[i]; 
-                count++; 
-            }
-            else {
-                if (*aux[i+1] < 'A' || *aux[i+1] > 'Z'){}
-                else {
-                    linearVetor[count] = &separator;
-                    count++;
-                }
-            } 
-        }
-        //printf ("%c ", *linearVetor[count-1]);
+        linearVetor[count] = aux[i];
+        // printf ("%c ", *aux[i]);
+        count++;
     }
-    printf ("teste");
-    for (i = 0; i < count; i++) printf ("%c ", *linearVetor[i]);            
+    // for (i = 0; i < count; i++) printf ("%c ", *linearVetor[i]);            
 
     linearVetor[count] = &separator;
     linearVetor[count++] = &separator;
@@ -191,9 +178,12 @@ Codex* linearizarMatriz(void* _matriz, int size[2]) {
     // siz = inverterVetor(count, linearVetor, linearVetor);    
 
     Codex* finalVec = create_codex(count+1);    
-
+    finalVec->length = count+1;
     // Para cada termo do vetor e atribuido no struct finalvec 
-    for (i = 0; i < siz; i++) { finalVec->vec[i]=linearVetor[i]; }
+    for (i = 0; i < count; i++) { 
+        finalVec->vec[i]=linearVetor[i]; 
+        // printf ("%c ", *(finalVec->vec[i]));
+    }
     return finalVec;
 } 
 
