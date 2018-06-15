@@ -31,6 +31,17 @@ long int calcDig(long int num) {
     return dig+1;
 }
 
+void printB (char *string) {
+    int i;
+    for (i = 0; i < strlen(string); i++) {
+        if (isspace(string[i])) {
+            fputc(string[i], stdout);
+        } else {
+            printf (ANSI_BACKCOLOR_BLACK ANSI_BOLD ANSI_COLOR_BLACK " " ANSI_COLOR_RESET, string[i]);
+        }
+    }
+}
+
 /*  Objetivo: Comportamento similar ao fgets so que sem quebra de linha
     Parametros formais:
     (int mode): define se vai ou nao ser impresso em uppercase
@@ -161,14 +172,14 @@ int abrirMenuCli(){
     // Testando se e a primeira vez que a funcao e chamada
     if (flag == 0) {
         printf (ANSI_COLOR_BLUE "                                                                               \n" ANSI_COLOR_RESET);                                                                                                                      
-        printf ("I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
-        printf ("`8b       d8b       d8'  88        88  88        88  8888b     88       88     \n");
-        printf ("  8,     ,8'8,     ,8'   88        88  88        88  88 `8b    88       88     \n");
-        printf ("  Y8     8P Y8     8P    88aaaaaaaa88  88        88  88  `8b   88       88     \n");
-        printf ("  `8b   d8' `8b   d8'    88''''''''88  88        88  88   `8b  88       88     \n");
-        printf ("   `8a a8'   `8a a8'     88        88  88        88  88    `8b 88       88     \n");
-        printf ("    `8a8'     `8a8'      88        88  Y8a.    .a8P  88     `8888       88     \n");
-        printf ("     `8'       `8'       88        88   `'Y8888Y''   88      `888       88     \n");
+        printB ("I8,        8        ,8I  88        88  88        88  888b      88  888888888888\n");
+        printB ("`8b       d8b       d8'  88        88  88        88  8888b     88       88     \n");
+        printB ("  8,     ,8'8,     ,8'   88        88  88        88  88 `8b    88       88     \n");
+        printB ("  Y8     8P Y8     8P    88aaaaaaaa88  88        88  88  `8b   88       88     \n");
+        printB ("  `8b   d8' `8b   d8'    88''''''''88  88        88  88   `8b  88       88     \n");
+        printB ("   `8a a8'   `8a a8'     88        88  88        88  88    `8b 88       88     \n");
+        printB ("    `8a8'     `8a8'      88        88  Y8a.    .a8P  88     `8888       88     \n");
+        printB ("     `8'       `8'       88        88   `'Y8888Y''   88      `888       88     \n");
         printT ("+------------------------------------------+\n");
         flag++;    
     } else                                      printf ("+------------------------------------------+\n");
