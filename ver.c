@@ -31,7 +31,7 @@ int verPalavras(void* _palavras, char *identificacao, int maiorPalavra, int numP
     (char *_filename): Nome do arquivo
     (int sizeName): tamanho do nome
 */
-int verArquivo(Codex *flatten, char* _filename, int sizeName, int sizeFlatten, Codex *palavras){
+int verArquivo(Codex *flatten, char* _filename, int sizeName, int sizeFlatten, Codex *palavras, int *numpalavras){
 
     int MAX_SIZE = 100, i, j = 0, k, count, countPalavras = 0;
     char namefile[sizeName+4], ch;
@@ -104,6 +104,7 @@ int verArquivo(Codex *flatten, char* _filename, int sizeName, int sizeFlatten, C
             }
     
         }
+        *numpalavras+=1;
         // for (i = 0; i < countPalavras-1; i++) printf ("%c", *(palavras->vec[i]));
         palavras->length = countPalavras;
         if (count != strlen(name)) return 0;

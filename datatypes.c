@@ -9,7 +9,7 @@ typedef struct Vector_t {
 // Wrap para salvar o codice
 typedef struct Vector_codex {
     int length;
-    char *vec[];
+    char *vec[];    
 } Codex;
 
 /*  Objetivos: Cria e retorna um vec de tamanho length
@@ -19,7 +19,7 @@ typedef struct Vector_codex {
 Codex* create_codex(int length) {
 
     // Aloca o espaco para guardar o codice
-    Codex* cod = malloc(sizeof(Codex) + length*sizeof(char*));
+    Codex* cod = malloc(sizeof(Codex) + length*sizeof(char*) + length*sizeof(int));
     // Caso nao tenha alocado
     if (cod != NULL) { 
         cod -> length = length;

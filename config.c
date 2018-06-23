@@ -1,5 +1,6 @@
 // Arquivo para definir as diretivas de uso dependendo do OS
 
+char separator = '\n';
 
 #if __linux__
     #include <termios.h>

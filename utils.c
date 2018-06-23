@@ -18,7 +18,6 @@ void printT(char text[]){
 void tabbing(){
     printf (tab);
 }
-char separator = '\n';
 
 /*  Objetivo: Retorna o maior inteiro
     Parametros formais:

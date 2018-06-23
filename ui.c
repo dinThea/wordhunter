@@ -138,7 +138,8 @@ int abrirMenuCli(){
     static Codex *flatten = NULL, *palavras = NULL;
     /* Armazena estaticamente e dinamicamente o caca
         palavras
-    */                                                   
+    */
+    static int * headers;                                                   
     static Caca* caca = NULL;
     /* Contadores estaticos de pontuacao e de numero
         de palavras e de chamada
@@ -163,6 +164,7 @@ int abrirMenuCli(){
 
         size[0] = i;
         size[1] = j;
+        headers = malloc(size[0]*size[1]*2*(sizeof(int)));
         flatten = linearizarMatriz(matriz[0][0], size);
         palavras = NULL;
         palavras = create_codex(flatten->length);
@@ -186,10 +188,11 @@ int abrirMenuCli(){
     printT ("|  Selecione a tarefa que deseja executar: | \n");                                                                                                         
     printT ("|      1. Abrir/Vizualizar caca palavras   | \n");                                                                                                         
     printT ("|      2. Gerar caca palavras              | \n");  
-    printT ("|      3. Validar caca palavras            | \n"); 
+    printT ("|      3. Validar caca palavras            | \n");
     printT ("|      4. DEBUG                            | \n"); 
-    printT ("|      5. Inserir palavra                  | \n");                                                                                                              
-    printT ("|      6. Sair                             | \n");                                                                                                         
+    printT ("|      5. Inserir palavra                  | \n");
+    printT ("|      6. Estaticas                        | \n");    
+    printT ("|      7. Sair                             | \n");                                                                                                         
     printT ("+------------------------------------------+ \n");
     tabbing();
     // Lendo a entrada e gerando a arvore de selecao
@@ -361,15 +364,19 @@ int abrirMenuCli(){
                     i = 0;
                     printf ("| ");                                            
                     while (k < numpalavras) {
-                        printf ("%c", (*caca).caca.vec[i]);
-                        if ((*caca).caca.vec[i] == '\n') {
+                        if (*(flatten->vec[i]) == separator) {
                             tabbing();
                             if (k < numpalavras-1)
-                                printf ("| ");                        
+                                printf ("| ");   
+                            else {
+                            }                     
                             k++;
+                        } else {
+                            palavras->vec[i] = flatten->vec[i];
                         }
                         i++;
                     }
+                    numpalavras+=k;
 
                 break;
                 case '3' :
@@ -413,29 +420,22 @@ int abrirMenuCli(){
                 break;
             }
         break;
-        case '0' :
-            printf ("+------------------PALPITE-----------------+\n");
-            printT ("|            Insira um palpite:            |\n");                                                                                                         
-            printT ("|      P. ");
-            fgets_(aux, 100, 1, 1);
-            memset(aux2, '\0', 99);            
-            printf ("%s", memset(aux2, ' ', 33-strlen(aux)));                                                    
-            printf ("|\n");
-            //fputs((*flatten).vec, stdout);
-            if (strstr((*flatten).vec, aux) != NULL) {
-                printT ("+------------------ACHOU-------------------+\n");
-                pontuacao++;
-            }
-            else printT ("+------------------NADA--------------------+\n");
-            tabbing();
-            abrirMenuCli();
+        case '6' :
             
-        break;
-        case '9' :
+            printf ("+---INSIRA-O-NUMERO-TOTAL-DE-PALAVRAS------+\n");
+            printT ("|      N. ");
+            int num;
+            num = getd();
+            // printf ("%d %d", num, numpalavras);
+            memset(aux2, '\0', 99);
+            memset(aux2, ' ', 33 - calcDig(num));
+            fputs(aux2, stdout);
+            printf ("|\n");
+            tabbing();
             printf ("+-------------SUA-PONTUACAO-E--------------+\n");
-            printT ("|      P. ");
-            printf ("%d", pontuacao);
-            for (i = 0; i < 32-calcDig(pontuacao); i++) printf (" ");
+            printT ("|      P. \%");
+            printf ("%.2f", 100*((float)numpalavras)/(num));
+            for (i = 0; i < 28-calcDig(pontuacao); i++) printf (" ");
             printf ("|\n");
             printT ("+------------------------------------------+\n");
             tabbing();
@@ -498,7 +498,7 @@ int abrirMenuCli(){
                     printf ("%s", memset(aux2, ' ', 33-strlen(aux)));                    
                     printf ("|\n");
                     tabbing();
-                    if (verArquivo(flatten, aux, strlen(aux)+1, flatten->length, palavras)) {
+                    if (verArquivo(flatten, aux, strlen(aux)+1, flatten->length, palavras, &numpalavras)) {
                         printf("|           TUDO CORRETO%-19c|\n", ' ');
                         printT ("+------------------------------------------+\n");
                     } else {
@@ -532,11 +532,9 @@ int abrirMenuCli(){
                     int countPalavras = 0;
                   
                     for (i = 0; i < num; i++) {
-                        // Caso o valor do termo do arquivo for nulo, a funcao retornara a zero
                         for (j = 0; j < flatten->length - strlen(_palavras[i]); j++) {
                             if (count == strlen(_palavras[i])) break;                                    
                             for (k = 0; k < strlen(_palavras[i]); k++) {
-                                printf ("%c", *(flatten->vec[j+k]));
                                 if (count == strlen(_palavras[i])) break;                                        
                                 if (*(flatten->vec[j+k]) == _palavras[i][k]){
                                     count++;
@@ -544,7 +542,6 @@ int abrirMenuCli(){
                                         for (l = 0; l < strlen(_palavras[i]); l++) {
                                             palavras->vec[countPalavras] = flatten->vec[j+k-l];
                                             countPalavras++;
-                                            //printf ("%c\n", *(_palavras->vec[countPalavras]));         
                                         }
                                         break;
                                     }
@@ -575,6 +572,7 @@ int abrirMenuCli(){
                                     }
                                 }
                             }
+                            numpalavras++;
 
                         }
                         if (count != strlen(_palavras[i])) {
@@ -643,7 +641,7 @@ int abrirMenuCli(){
             }
             tabbing();
         break;
-        case '6' :
+        case '7' :
             printf ("+------------------SAINDO------------------+\n");
             exit(0);
         break;
